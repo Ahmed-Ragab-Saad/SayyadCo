@@ -1,9 +1,20 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
+using SayyadCo.Application.Common.Interfaces;
+using SayyadCo.Application.Interfaces;
+using SayyadCo.Application.Mappings;
+using SayyadCo.Domain.Interfaces;
+using SayyadCo.Domain.Interfaces.Repositories;
 using SayyadCo.Infrastructure.Data;
 using SayyadCo.Infrastructure.Identity;
+using SayyadCo.Infrastructure.Repositories;
+using SayyadCo.Infrastructure.Services.Auth;
+using SayyadCo.Infrastructure.Services.Email;
+using System.Text;
 
 namespace SayyadCo.Infrastructure
 {
@@ -29,6 +40,43 @@ namespace SayyadCo.Infrastructure
             })
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
+
+            services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
+
+            var jwtSettings = configuration.GetSection("JwtSettings").Get<JwtSettings>();
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = jwtSettings!.Issuer,
+                    ValidAudience = jwtSettings.Audience,
+                    IssuerSigningKey = new SymmetricSecurityKey(
+                        Encoding.UTF8.GetBytes(jwtSettings.Secret)),
+                    ClockSkew = TimeSpan.Zero
+                };
+            });
+
+            services.AddAutoMapper(cfg =>
+            {
+                cfg.AddMaps(typeof(AuthProfile).Assembly);
+            });
+
+            services.AddScoped<IUnitOfWork, UnitOfWork.UnitOfWork>();
+            services.AddScoped<IJwtGenerator, JwtGenerator>();
+            services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+            services.AddScoped<IEmailService, EmailService>();
+            services.AddScoped<IOtpRepository, OtpRepository>();
+            services.Configure<EmailSettings>(configuration.GetSection("EmailSettings"));
 
             return services;
         }

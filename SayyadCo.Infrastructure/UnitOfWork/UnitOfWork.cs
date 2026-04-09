@@ -1,4 +1,5 @@
 ﻿using SayyadCo.Domain.Interfaces;
+using SayyadCo.Domain.Interfaces.Repositories;
 using SayyadCo.Infrastructure.Data;
 
 namespace SayyadCo.Infrastructure.UnitOfWork
@@ -6,10 +7,14 @@ namespace SayyadCo.Infrastructure.UnitOfWork
     public class UnitOfWork : IUnitOfWork
     {
         private readonly AppDbContext _context;
+        public IRefreshTokenRepository RefreshTokens { get; }
+        public IOtpRepository Otps { get; }
 
-        public UnitOfWork(AppDbContext context)
+        public UnitOfWork(AppDbContext context, IRefreshTokenRepository refreshTokenRepository, IOtpRepository otps)
         {
             _context = context;
+            RefreshTokens = refreshTokenRepository;
+            Otps = otps;
         }
 
         public async Task<int> SaveChangesAsync()
