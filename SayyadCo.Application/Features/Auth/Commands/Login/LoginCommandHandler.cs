@@ -33,7 +33,7 @@ namespace SayyadCo.Application.Features.Auth.Commands.Login
         {
             var user = await _authService.FindByEmailAsync(request.Email);
             if (user is null)
-                return Result<LoginResponseDto>.NotFound("Invalid email or password");
+                return Result<LoginResponseDto>.Failure("Invalid email or password");
 
             if (await _authService.IsLockedOutAsync(user.Id))
                 return Result<LoginResponseDto>.Failure("Account is locked please try again later");
@@ -75,7 +75,7 @@ namespace SayyadCo.Application.Features.Auth.Commands.Login
 
             var tokens = _jwtGenerator.GenerateTokens(userModel);
 
-            await _unitOfWork.RefreshTokens.AddAsync(new RefreshToken()
+            await _unitOfWork.RefreshTokens.AddAsync(new Domain.Entities.RefreshToken()
             {
                 Token = tokens.RefreshToken,
                 UserId = user.Id,

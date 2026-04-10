@@ -4,7 +4,6 @@ using SayyadCo.Application.Common.Interfaces;
 using SayyadCo.Application.Common.Models;
 using SayyadCo.Application.Common.Results;
 using SayyadCo.Application.Interfaces;
-using SayyadCo.Domain.Entities;
 using SayyadCo.Domain.Interfaces;
 
 namespace SayyadCo.Application.Features.Auth.Commands.VerifyEmail
@@ -72,7 +71,7 @@ namespace SayyadCo.Application.Features.Auth.Commands.VerifyEmail
 
             var tokens = _jwtGenerator.GenerateTokens(userModel);
 
-            await _unitOfWork.RefreshTokens.AddAsync(new RefreshToken
+            await _unitOfWork.RefreshTokens.AddAsync(new Domain.Entities.RefreshToken
             {
                 Token = tokens.RefreshToken,
                 UserId = user.Id,

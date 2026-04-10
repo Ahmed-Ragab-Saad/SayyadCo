@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SayyadCo.Application.Common.Models;
+using SayyadCo.Application.Features.Auth.Commands.GoogleLogin;
 using SayyadCo.Application.Features.Auth.Commands.Login;
+using SayyadCo.Application.Features.Auth.Commands.RefreshToken;
 using SayyadCo.Application.Features.Auth.Commands.Register;
 using SayyadCo.Application.Features.Auth.Commands.ResendOtp;
 using SayyadCo.Application.Features.Auth.Commands.VerifyEmail;
@@ -32,7 +35,7 @@ namespace SayyadCo.API.Controllers
         /// <response code="400">Validation error or email already exists</response>
         [HttpPost("register")]
         [ProducesResponseType(typeof(RegisterResponseDto), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Register([FromBody] RegisterCommand command)
             => HandleResult(await Mediator.Send(command));
 
@@ -60,8 +63,8 @@ namespace SayyadCo.API.Controllers
         /// <response code="404">Verification token not found</response>
         [HttpPost("verify-email")]
         [ProducesResponseType(typeof(VerifyEmailResponseDto), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> VerifyEmail([FromBody] VerifyEmailCommand command)
             => HandleResult(await Mediator.Send(command));
 
@@ -88,8 +91,8 @@ namespace SayyadCo.API.Controllers
         /// <response code="404">Verification token not found</response>
         [HttpPost("resend-otp")]
         [ProducesResponseType(typeof(ResendOtpResponseDto), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> ResendOtp([FromBody] ResendOtpCommand command)
             => HandleResult(await Mediator.Send(command));
 
@@ -123,9 +126,53 @@ namespace SayyadCo.API.Controllers
         /// <response code="403">Email not verified, OTP sent to email</response>
         [HttpPost("login")]
         [ProducesResponseType(typeof(LoginResponseDto), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> Login([FromBody] LoginCommand command)
+            => HandleResult(await Mediator.Send(command));
+
+        /// <summary>
+        /// Refresh access token
+        /// </summary>
+        /// <remarks>
+        /// Generates new Access Token and Refresh Token using an expired Access Token and valid Refresh Token.
+        /// The old Refresh Token is invalidated automatically.
+        ///
+        /// Sample request:
+        ///
+        ///     POST /api/auth/refresh-token
+        ///     {
+        ///         "accessToken": "eyJhbGci...",
+        ///         "refreshToken": "base64-refresh-token"
+        ///     }
+        /// </remarks>
+        /// <response code="200">Returns new tokens</response>
+        /// <response code="400">Invalid or expired tokens</response>
+        /// <response code="404">Refresh token not found</response>
+        [HttpPost("refresh-token")]
+        [ProducesResponseType(typeof(RefreshTokenResponseDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenCommand command)
+            => HandleResult(await Mediator.Send(command));
+
+        /// <summary>Google OAuth Login</summary>
+        /// <remarks>
+        /// Authenticates user with Google ID Token received from the frontend Google SDK.
+        ///
+        /// Sample request:
+        ///
+        ///     POST /api/auth/google-login
+        ///     {
+        ///         "idToken": "eyJhbGci..."
+        ///     }
+        /// </remarks>
+        /// <response code="200">Login successful, returns tokens</response>
+        /// <response code="400">Invalid Google token</response>
+        [HttpPost("google-login")]
+        [ProducesResponseType(typeof(GoogleLoginResponseDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GoogleLogin([FromBody] GoogleLoginCommand command)
             => HandleResult(await Mediator.Send(command));
     }
 }

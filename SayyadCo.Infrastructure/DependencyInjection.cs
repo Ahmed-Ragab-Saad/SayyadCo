@@ -76,7 +76,10 @@ namespace SayyadCo.Infrastructure
             services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
             services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<IOtpRepository, OtpRepository>();
+            services.AddScoped<IGoogleAuthService, GoogleAuthService>();
+
             services.Configure<EmailSettings>(configuration.GetSection("EmailSettings"));
+            services.Configure<GoogleAuthSettings>(configuration.GetSection("GoogleAuthSettings"));
 
             return services;
         }

@@ -84,14 +84,21 @@ namespace SayyadCo.Infrastructure.Identity
                     Encoding.UTF8.GetBytes(_jwtSettings.Secret))
             };
 
-            var handler = new JwtSecurityTokenHandler();
-            var principal = handler.ValidateToken(token, validationParameters, out var securityToken);
+            try
+            {
+                var handler = new JwtSecurityTokenHandler();
+                var principal = handler.ValidateToken(token, validationParameters, out var securityToken);
 
-            if (securityToken is not JwtSecurityToken jwtToken ||
-                !jwtToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256))
-                throw new SecurityTokenException("Invalid token");
+                if (securityToken is not JwtSecurityToken jwtToken ||
+                    !jwtToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256))
+                    return null;
 
-            return principal;
+                return principal;
+            }
+            catch
+            {
+                return null;
+            }
         }
     }
 }

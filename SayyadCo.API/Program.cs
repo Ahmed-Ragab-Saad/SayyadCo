@@ -29,12 +29,10 @@ namespace SayyadCo.API
                     Version = "v1"
                 });
 
-                // ✅ XML Comments
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 options.IncludeXmlComments(xmlPath);
 
-                // ✅ JWT في Swashbuckle 10.x
                 options.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, new OpenApiSecurityScheme
                 {
                     Name = "Authorization",

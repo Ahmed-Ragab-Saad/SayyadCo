@@ -2,6 +2,7 @@
 using SayyadCo.Application.Common.Models;
 using SayyadCo.Application.Features.Auth.Commands.Register;
 using SayyadCo.Application.Interfaces;
+using SayyadCo.Domain.Common;
 using SayyadCo.Infrastructure.Identity;
 
 namespace SayyadCo.Infrastructure.Services.Auth
@@ -128,6 +129,50 @@ namespace SayyadCo.Infrastructure.Services.Auth
                 return false;
 
             return await _userManager.IsLockedOutAsync(user);
+        }
+
+        public async Task<RegisterResultModel> RegisterExternalAsync(string firstName, string lastName, string email)
+        {
+            var user = new ApplicationUser
+            {
+                FirstName = firstName,
+                LastName = lastName,
+                Email = email,
+                UserName = email,
+                EmailConfirmed = true
+            };
+
+            var result = await _userManager.CreateAsync(user);
+            if (!result.Succeeded)
+            {
+                return new RegisterResultModel
+                {
+                    Succeeded = false,
+                    Errors = result.Errors.Select(e => e.Description)
+                };
+            }
+
+            var rolesResult = await _userManager.AddToRolesAsync(user, [AppRoles.User]);
+            if (!rolesResult.Succeeded)
+            {
+                await _userManager.DeleteAsync(user);
+                return new RegisterResultModel
+                {
+                    Succeeded = false,
+                    Errors = rolesResult.Errors.Select(e => e.Description)
+                };
+            }
+
+            return new RegisterResultModel
+            {
+                Succeeded = true,
+                UserId = user.Id
+            };
+        }
+
+        public Task<bool> IsExternalUserAsync(string userId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using SayyadCo.Application.Common.Models;
 using SayyadCo.Application.Features.Auth.Commands.Login;
+using SayyadCo.Application.Features.Auth.Commands.RefreshToken;
 using SayyadCo.Application.Features.Auth.Commands.Register;
 using SayyadCo.Application.Features.Auth.Commands.VerifyEmail;
 
@@ -19,6 +20,8 @@ namespace SayyadCo.Application.Mappings
             CreateMap<TokenResult, VerifyEmailResponseDto>();
 
             CreateMap<TokenResult, LoginResponseDto>();
+
+            CreateMap<TokenResult, RefreshTokenResponseDto>();
         }
     }
 }

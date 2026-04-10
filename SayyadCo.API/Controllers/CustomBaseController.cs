@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using SayyadCo.Application.Common.Models;
 using SayyadCo.Application.Common.Results;
 
 namespace SayyadCo.API.Controllers
@@ -24,15 +25,15 @@ namespace SayyadCo.API.Controllers
             return result.Status switch
             {
                 ResultStatus.Success => Ok(result.Data),
-                ResultStatus.NotFound => NotFound(result.Error),
-                ResultStatus.Unauthorized => Unauthorized(result.Error),
+                ResultStatus.NotFound => NotFound(new ErrorResponse { Error = result.Error }),
+                ResultStatus.Unauthorized => Unauthorized(new ErrorResponse { Error = result.Error }),
                 ResultStatus.ValidationError => BadRequest(result),
                 ResultStatus.UnverifiedEmail => StatusCode(403, new
                 {
-                    error = result.Error,
-                    verificationToken = result.VerificationToken
+                    Error = result.Error,
+                    VerificationToken = result.VerificationToken ?? string.Empty
                 }),
-                _ => BadRequest(result.Error)
+                _ => BadRequest(new ErrorResponse { Error = result.Error })
             };
         }
 
