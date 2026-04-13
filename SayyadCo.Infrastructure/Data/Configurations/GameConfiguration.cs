@@ -20,14 +20,28 @@ namespace SayyadCo.Infrastructure.Data.Configurations
                 .IsRequired()
                 .HasMaxLength(200);
 
+            builder.Property(g => g.DescriptionAr)
+                .IsRequired()
+                .HasMaxLength(500);
+
+            builder.Property(g => g.DescriptionEn)
+                .IsRequired()
+                .HasMaxLength(500);
+
             builder.Property(x => x.CreatedAt)
                 .IsRequired();
+
 
             // Relationships
             builder.HasMany(x => x.SectionGames)
                 .WithOne(sg => sg.Game)
                 .HasForeignKey(sg => sg.GameId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasOne(g => g.GameType)
+                .WithMany(gt => gt.Games)
+                .HasForeignKey(g => g.GameTypeId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             // Indexes
             builder.HasIndex(x => x.TitleAr);

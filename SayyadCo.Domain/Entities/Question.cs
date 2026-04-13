@@ -6,11 +6,7 @@ namespace SayyadCo.Domain.Entities
     {
         public string Title { get; set; } = string.Empty;
         public string? Image { get; set; }
-        public string Option1 { get; set; } = string.Empty;
-        public string Option2 { get; set; } = string.Empty;
-        public string Option3 { get; set; } = string.Empty;
-        public string Option4 { get; set; } = string.Empty;
-        public int CorrectAnswer { get; set; }
+        public string ContentJson { get; set; } = string.Empty;
 
         // Foreign Keys
         public string? ExamId { get; set; }

@@ -31,14 +31,14 @@ namespace SayyadCo.API.Middleware
 
                 await context.Response.WriteAsJsonAsync(new { errors });
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
                 context.Response.StatusCode = 500;
                 context.Response.ContentType = "application/json";
 
                 await context.Response.WriteAsJsonAsync(new
                 {
-                    error = "An unexpected error occurred."
+                    error = $"An unexpected error occurred. => {e.Message}"
                 });
             }
         }

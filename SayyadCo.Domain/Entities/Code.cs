@@ -6,6 +6,10 @@ namespace SayyadCo.Domain.Entities
     {
         public string Value { get; set; } = string.Empty;
         public bool IsUsed { get; set; } = false;
+        public string? UsedByUserId { get; set; }
+        public DateTime? UsedAt { get; set; }
+        public DateTime? ExpiresAt { get; set; }
+
         public string SectionId { get; set; } = string.Empty;
         public string GameId { get; set; } = string.Empty;
         public string UserId { get; set; } = string.Empty;

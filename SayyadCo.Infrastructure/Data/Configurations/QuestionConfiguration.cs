@@ -18,24 +18,7 @@ namespace SayyadCo.Infrastructure.Data.Configurations
                 .IsRequired(false)
                 .HasMaxLength(500);
 
-            builder.Property(x => x.Option1)
-                .IsRequired()
-                .HasMaxLength(200);
 
-            builder.Property(x => x.Option2)
-                .IsRequired()
-                .HasMaxLength(200);
-
-            builder.Property(x => x.Option3)
-                .IsRequired()
-                .HasMaxLength(200);
-
-            builder.Property(x => x.Option4)
-                .IsRequired()
-                .HasMaxLength(200);
-
-            builder.Property(x => x.CorrectAnswer)
-                .IsRequired();
 
             builder.Property(x => x.ExamId)
                 .IsRequired(false);

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SayyadCo.Application.Common.Models;
+using SayyadCo.Application.Features.Auth.Commands.FacebookLogin;
 using SayyadCo.Application.Features.Auth.Commands.GoogleLogin;
 using SayyadCo.Application.Features.Auth.Commands.Login;
 using SayyadCo.Application.Features.Auth.Commands.RefreshToken;
@@ -173,6 +174,25 @@ namespace SayyadCo.API.Controllers
         [ProducesResponseType(typeof(GoogleLoginResponseDto), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GoogleLogin([FromBody] GoogleLoginCommand command)
+            => HandleResult(await Mediator.Send(command));
+
+        /// <summary>Facebook OAuth Login</summary>
+        /// <remarks>
+        /// Authenticates user with Facebook Access Token received from the frontend Facebook SDK.
+        ///
+        /// Sample request:
+        ///
+        ///     POST /api/auth/facebook-login
+        ///     {
+        ///         "accessToken": "EAAxxxxxxx..."
+        ///     }
+        /// </remarks>
+        /// <response code="200">Login successful, returns tokens</response>
+        /// <response code="400">Invalid Facebook token or no email on account</response>
+        [HttpPost("facebook-login")]
+        [ProducesResponseType(typeof(FacebookLoginResponseDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> FacebookLogin([FromBody] FacebookLoginCommand command)
             => HandleResult(await Mediator.Send(command));
     }
 }

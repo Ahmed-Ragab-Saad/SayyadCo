@@ -53,7 +53,7 @@ namespace SayyadCo.Infrastructure.Repositories
                 query = ApplySearch(query, parameters.SearchTerm);
             }
 
-            if (!string.IsNullOrWhiteSpace(parameters.OrderBy))
+            if (!string.IsNullOrWhiteSpace(parameters.OrderBy) || parameters.IsDescending)
             {
                 query = ApplySorting(query, parameters.OrderBy, parameters.IsDescending);
             }
@@ -179,7 +179,7 @@ namespace SayyadCo.Infrastructure.Repositories
         private IQueryable<T> ApplySorting(IQueryable<T> query, string? orderBy, bool isDescending)
         {
             if (string.IsNullOrWhiteSpace(orderBy))
-                return query;
+                orderBy = "Id";
 
             var property = typeof(T)
                 .GetProperties()

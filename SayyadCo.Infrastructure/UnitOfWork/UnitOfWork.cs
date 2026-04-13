@@ -8,13 +8,16 @@ namespace SayyadCo.Infrastructure.UnitOfWork
     {
         private readonly AppDbContext _context;
         public IRefreshTokenRepository RefreshTokens { get; }
+        public ISectoinRepository Sections { get; }
         public IOtpRepository Otps { get; }
 
-        public UnitOfWork(AppDbContext context, IRefreshTokenRepository refreshTokenRepository, IOtpRepository otps)
+        public UnitOfWork(AppDbContext context, IRefreshTokenRepository refreshTokenRepository, IOtpRepository otps,
+             ISectoinRepository sections)
         {
             _context = context;
             RefreshTokens = refreshTokenRepository;
             Otps = otps;
+            Sections = sections;
         }
 
         public async Task<int> SaveChangesAsync()

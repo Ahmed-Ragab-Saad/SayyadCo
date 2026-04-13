@@ -9,13 +9,13 @@ namespace SayyadCo.Infrastructure.Data.Configurations
         public void Configure(EntityTypeBuilder<Code> builder)
         {
             builder.ToTable("Codes");
-
             builder.HasKey(x => x.Id);
 
             builder.Property(x => x.Value)
                 .IsRequired()
                 .HasMaxLength(50);
 
+            // ✅ بدل SectionGameId
             builder.Property(x => x.SectionId)
                 .IsRequired()
                 .HasMaxLength(450);
@@ -25,8 +25,7 @@ namespace SayyadCo.Infrastructure.Data.Configurations
                 .HasMaxLength(450);
 
             builder.Property(x => x.UserId)
-                .IsRequired()
-                .HasMaxLength(450);
+                .HasMaxLength(450); // ✅ مش Required لأنه Nullable
 
             builder.Property(x => x.GameRoleId)
                 .IsRequired()
@@ -39,10 +38,11 @@ namespace SayyadCo.Infrastructure.Data.Configurations
             builder.Property(x => x.CreatedAt)
                 .IsRequired();
 
-            // Relationships
+            // ✅ Composite FK
             builder.HasOne(x => x.SectionGame)
                 .WithMany(sg => sg.Codes)
                 .HasForeignKey(x => new { x.SectionId, x.GameId })
+                .HasPrincipalKey(sg => new { sg.SectionId, sg.GameId })
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasOne(x => x.GameRole)
@@ -51,11 +51,9 @@ namespace SayyadCo.Infrastructure.Data.Configurations
                 .OnDelete(DeleteBehavior.Restrict);
 
             // Indexes
-            builder.HasIndex(x => x.Value)
-                .IsUnique();
-
+            builder.HasIndex(x => x.Value).IsUnique();
             builder.HasIndex(x => x.UserId);
-            builder.HasIndex(x => new { x.SectionId, x.GameId });
+            builder.HasIndex(x => new { x.SectionId, x.GameId }); // ✅
             builder.HasIndex(x => x.GameRoleId);
             builder.HasIndex(x => x.IsUsed);
         }

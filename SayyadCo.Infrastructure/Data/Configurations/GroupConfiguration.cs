@@ -35,6 +35,13 @@ namespace SayyadCo.Infrastructure.Data.Configurations
             builder.Property(x => x.CreatedAt)
                 .IsRequired();
 
+            //Relashins
+            builder.HasOne(x => x.SectionGame)
+                .WithMany(sg => sg.Groups)
+                .HasForeignKey(x => new { x.SectionId, x.GameId })
+                .HasPrincipalKey(sg => new { sg.SectionId, sg.GameId })
+                .OnDelete(DeleteBehavior.Cascade);
+
             // Indexes
             builder.HasIndex(x => x.Name);
             builder.HasIndex(x => x.IsPrivate);
