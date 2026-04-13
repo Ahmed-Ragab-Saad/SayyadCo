@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using SayyadCo.Application.Features.Games.Commands.CreateGame;
 using SayyadCo.Application.Features.Games.Commands.UpdateGame;
+using SayyadCo.Application.Features.Games.Queries.GetAllGames;
+using SayyadCo.Application.Features.Games.Queries.GetGameById;
 using SayyadCo.Domain.Entities;
 
 namespace SayyadCo.Application.Mappings
@@ -14,6 +16,10 @@ namespace SayyadCo.Application.Mappings
 
             CreateMap<UpdateGameCommand, Game>();
             CreateMap<Game, UpdateGameResponseDto>();
+
+            CreateMap<Game, GetAllGamesResponseDto>();
+
+            CreateMap<Game, GetGameByIdResponseDto>();
         }
     }
 }

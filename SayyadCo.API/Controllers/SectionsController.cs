@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SayyadCo.Application.Common.Models;
+using SayyadCo.Application.Features.SectionGames.Commands.AddGameToSection;
+using SayyadCo.Application.Features.SectionGames.Commands.RemoveGameFromSection;
+using SayyadCo.Application.Features.SectionGames.Queries.GetSectionGames;
 using SayyadCo.Application.Features.Sections.Commands.CreateSection;
 using SayyadCo.Application.Features.Sections.Commands.DeleteSection;
 using SayyadCo.Application.Features.Sections.Commands.UpdateSection;
@@ -126,10 +129,81 @@ namespace SayyadCo.API.Controllers
         ///     GET /api/sections?pageNumber=1&amp;pageSize=10&amp;searchTerm=math&amp;orderBy=titleEn&amp;isDescending=false
         /// </remarks>
         /// <response code="200">Returns paginated list of sections</response>
+        /// <response code="401">Unauthorized</response>
         [HttpGet]
         [ProducesResponseType(typeof(PagedResult<GetAllSectionsResponseDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> GetAll([FromQuery] GetAllSectionsQuery query)
             => HandleResult(await Mediator.Send(query));
+
+        /// <summary>Add game to section</summary>
+        /// <remarks>
+        /// Links an existing game to a section.
+        ///
+        /// Sample request:
+        ///
+        ///     POST /api/sections/3fa85f64.../games/4gb96g75...
+        /// </remarks>
+        /// <response code="200">Game added to section successfully</response>
+        /// <response code="400">Game already exists in section</response>
+        /// <response code="401">Unauthorized</response>
+        /// <response code="404">Section or Game not found</response>
+        [HttpPost("{sectionId}/games/{gameId}")]
+        [ProducesResponseType(typeof(AddGameToSectionResponseDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> AddGame(string sectionId, string gameId)
+            => HandleResult(await Mediator.Send(new AddGameToSectionCommand
+            {
+                SectionId = sectionId,
+                GameId = gameId
+            }));
+
+        /// <summary>Remove game from section</summary>
+        /// <remarks>
+        /// Removes a game from a section.
+        ///
+        /// **Warning:** This will also delete all associated questions and codes.
+        ///
+        /// Sample request:
+        ///
+        ///     DELETE /api/sections/3fa85f64.../games/4gb96g75...
+        /// </remarks>
+        /// <response code="200">Game removed from section successfully</response>
+        /// <response code="401">Unauthorized</response>
+        /// <response code="404">Game not found in section</response>
+        [HttpDelete("{sectionId}/games/{gameId}")]
+        [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> RemoveGame(string sectionId, string gameId)
+            => HandleResult(await Mediator.Send(new RemoveGameFromSectionCommand
+            {
+                SectionId = sectionId,
+                GameId = gameId
+            }));
+
+        /// <summary>Get all games in a section</summary>
+        /// <remarks>
+        /// Returns all games linked to a specific section.
+        ///
+        /// Sample request:
+        ///
+        ///     GET /api/sections/3fa85f64.../games
+        /// </remarks>
+        /// <response code="200">Returns list of games in section</response>
+        /// <response code="401">Unauthorized</response>
+        /// <response code="404">Section not found</response>
+        [HttpGet("{sectionId}/games")]
+        [AllowAnonymous]
+        [ProducesResponseType(typeof(PagedResult<GetSectionGamesResponseDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetGames([FromRoute] string sectionId, [FromQuery] GetSectionGamesQuery query)
+        {
+            query.SectionId = sectionId;
+            return HandleResult(await Mediator.Send(query));
+        }
     }
 }

@@ -8,6 +8,7 @@ namespace SayyadCo.Domain.Interfaces
         IOtpRepository Otps { get; }
         ISectoinRepository Sections { get; }
         IGameRepository Games { get; }
+        ISectionGameRepository SectionGames { get; }
         Task<int> SaveChangesAsync();
     }
 }
