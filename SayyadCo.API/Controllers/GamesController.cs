@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SayyadCo.Application.Common.Models;
 using SayyadCo.Application.Features.Games.Commands.CreateGame;
+using SayyadCo.Application.Features.Games.Commands.UpdateGame;
 
 namespace SayyadCo.API.Controllers
 {
@@ -22,8 +23,8 @@ namespace SayyadCo.API.Controllers
         ///     }
         /// </remarks>
         /// <response code="200">Game created successfully</response>
+        /// <response code="401">Unauthorized</response>
         /// <response code="400">Validation error</response>
-        /// <response code="404">GameType not found</response>
         [HttpPost]
         [ProducesResponseType(typeof(CreateGameResponseDto), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ValidationErrorResponse), StatusCodes.Status400BadRequest)]
@@ -32,6 +33,36 @@ namespace SayyadCo.API.Controllers
         public async Task<IActionResult> Create([FromBody] CreateGameCommand command)
             => HandleResult(await Mediator.Send(command));
 
+        /// <summary>Update an existing game</summary>
+        /// <remarks>
+        /// Updates game data by ID.
+        ///
+        /// Sample request:
+        ///
+        ///     PUT /api/games/3fa85f64-5717-4562-b3fc-2c963f66afa6
+        ///     {
+        ///         "titleAr": "من سيربح المليون المتقدم",
+        ///         "titleEn": "Advanced Millionaire",
+        ///         "descriptionAr": "نسخة متقدمة",
+        ///         "descriptionEn": "Advanced version",
+        ///         "image": "https://res.cloudinary.com/sayyadco/image/upload/game2.jpg",
+        ///         "gameTypeId": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+        ///     }
+        /// </remarks>
+        /// <response code="200">Game updated successfully</response>
+        /// <response code="400">Validation error</response>
+        /// <response code="401">Unauthorized</response>
+        /// <response code="404">Game not found</response>
+        [HttpPut("{id}")]
+        [ProducesResponseType(typeof(UpdateGameResponseDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(ValidationErrorResponse), StatusCodes.Status400BadRequest)]
 
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> Update(string id, [FromBody] UpdateGameCommand command)
+        {
+            command.Id = id;
+            return HandleResult(await Mediator.Send(command));
+        }
     }
 }
