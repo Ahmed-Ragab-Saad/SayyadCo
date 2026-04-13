@@ -38,10 +38,10 @@ namespace SayyadCo.Infrastructure.Data.Configurations
                 .HasForeignKey(sg => sg.GameId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            builder.HasOne(g => g.GameType)
-                .WithMany(gt => gt.Games)
-                .HasForeignKey(g => g.GameTypeId)
-                .OnDelete(DeleteBehavior.Restrict);
+            //builder.HasOne(g => g.GameType)
+            //    .WithMany(gt => gt.Games)
+            //    .HasForeignKey(g => g.GameTypeId)
+            //    .OnDelete(DeleteBehavior.Restrict);
 
             // Indexes
             builder.HasIndex(x => x.TitleAr);

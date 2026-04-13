@@ -10,14 +10,16 @@ namespace SayyadCo.Infrastructure.UnitOfWork
         public IRefreshTokenRepository RefreshTokens { get; }
         public ISectoinRepository Sections { get; }
         public IOtpRepository Otps { get; }
+        public IGameRepository Games { get; }
 
         public UnitOfWork(AppDbContext context, IRefreshTokenRepository refreshTokenRepository, IOtpRepository otps,
-             ISectoinRepository sections)
+             ISectoinRepository sections, IGameRepository games)
         {
             _context = context;
             RefreshTokens = refreshTokenRepository;
             Otps = otps;
             Sections = sections;
+            Games = games;
         }
 
         public async Task<int> SaveChangesAsync()

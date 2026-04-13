@@ -79,6 +79,8 @@ namespace SayyadCo.Infrastructure
             services.AddScoped<ISectoinRepository, SectionRepository>();
             services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<IOtpRepository, OtpRepository>();
+            services.AddScoped<IGameRepository, GameRepository>();
+
             services.AddScoped<IGoogleAuthService, GoogleAuthService>();
             services.AddHttpClient<IFacebookAuthService, FacebookAuthService>();
 

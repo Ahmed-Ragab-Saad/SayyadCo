@@ -10,7 +10,7 @@ using SayyadCo.Domain.Common;
 
 namespace SayyadCo.API.Controllers
 {
-    //[Authorize(Roles = AppRoles.SuperAdmin)]
+    [Authorize(Roles = AppRoles.SuperAdmin)]
     public class SectionsController : CustomBaseController
     {
         /// <summary>

@@ -7,6 +7,7 @@ namespace SayyadCo.Domain.Interfaces
         IRefreshTokenRepository RefreshTokens { get; }
         IOtpRepository Otps { get; }
         ISectoinRepository Sections { get; }
+        IGameRepository Games { get; }
         Task<int> SaveChangesAsync();
     }
 }
