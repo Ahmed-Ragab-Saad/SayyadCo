@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SayyadCo.Domain.Common;
 using SayyadCo.Domain.Entities;
+using SayyadCo.Domain.Enums;
 using SayyadCo.Domain.Interfaces.Repositories;
 using SayyadCo.Infrastructure.Data;
 
@@ -27,6 +28,25 @@ namespace SayyadCo.Infrastructure.Repositories
 
         public async Task<PagedResult<SectionGame>> GetBySectionIdAsync(string sectionId, QueryParameters parameters)
         {
+            return await PaginateSectionGames(sectionId, parameters);
+        }
+
+        public async Task<PagedResult<SectionGame>> GetFunnyGames(QueryParameters parameters)
+        {
+            var funnySection = await _context.Sections
+                .FirstOrDefaultAsync(s => s.SectionType == SectionType.Funny);
+
+            if (funnySection == null)
+                return new PagedResult<SectionGame>(new List<SectionGame>(), 0, parameters.PageNumber, parameters.PageSize);
+
+            return await PaginateSectionGames(funnySection.Id, parameters);
+        }
+
+        public void Remove(SectionGame sectionGame)
+            => _context.SectionGames.Remove(sectionGame);
+
+        private async Task<PagedResult<SectionGame>> PaginateSectionGames(string sectionId, QueryParameters parameters)
+        {
             var query = _context.SectionGames
                 .Include(sg => sg.Game)
                 .AsNoTracking()
@@ -49,8 +69,5 @@ namespace SayyadCo.Infrastructure.Repositories
 
             return new PagedResult<SectionGame>(items, totalCount, parameters.PageNumber, parameters.PageSize);
         }
-
-        public void Remove(SectionGame sectionGame)
-            => _context.SectionGames.Remove(sectionGame);
     }
 }

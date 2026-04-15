@@ -5,26 +5,22 @@ using SayyadCo.Application.Common.Results;
 using SayyadCo.Domain.Common;
 using SayyadCo.Domain.Interfaces;
 
-namespace SayyadCo.Application.Features.SectionGames.Queries.GetSectionGames
+namespace SayyadCo.Application.Features.SectionGames.Queries.GetFunnySectionGames
 {
-    public class GetSectionGamesQueryHandler : IRequestHandler<GetSectionGamesQuery, Result<PagedResult<GetSectionGamesResponseDto>>>
+    public class GetFunnySectionGamesQueryHandler : IRequestHandler<GetFunnySectionGamesQuery, Result<PagedResult<GetSectionGamesResponseDto>>>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public GetSectionGamesQueryHandler(IUnitOfWork unitOfWork, IMapper mapper)
+        public GetFunnySectionGamesQueryHandler(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
 
-        public async Task<Result<PagedResult<GetSectionGamesResponseDto>>> Handle(GetSectionGamesQuery request, CancellationToken cancellationToken)
+        public async Task<Result<PagedResult<GetSectionGamesResponseDto>>> Handle(GetFunnySectionGamesQuery request, CancellationToken cancellationToken)
         {
-            var secction = await _unitOfWork.Sections.GetByIdAsync(request.SectionId);
-            if (secction is null)
-                return Result<PagedResult<GetSectionGamesResponseDto>>.NotFound("Section not found");
-
-            var sectionGames = await _unitOfWork.SectionGames.GetBySectionIdAsync(request.SectionId, request);
+            var sectionGames = await _unitOfWork.SectionGames.GetFunnyGames(request);
 
             var mappedItems = sectionGames.Items.Select(sg => new GetSectionGamesResponseDto
             {

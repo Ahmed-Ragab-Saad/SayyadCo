@@ -4,22 +4,22 @@ using SayyadCo.Application.Common.Results;
 using SayyadCo.Domain.Entities;
 using SayyadCo.Domain.Interfaces;
 
-namespace SayyadCo.Application.Features.SectionGames.Commands.AddGameToSection
+namespace SayyadCo.Application.Features.SectionGames.Commands.AddGameToFunnySection
 {
-    public class AddGameToSectionCommandHandler : IRequestHandler<AddGameToSectionCommand, Result<AddGameToSectionResponseDto>>
+    public class AddGameToFunnySectionCommandHandler : IRequestHandler<AddGameToFunnySectionCommand, Result<AddGameToSectionResponseDto>>
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        public AddGameToSectionCommandHandler(IUnitOfWork unitOfWork)
+        public AddGameToFunnySectionCommandHandler(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<Result<AddGameToSectionResponseDto>> Handle(AddGameToSectionCommand request, CancellationToken cancellationToken)
+        public async Task<Result<AddGameToSectionResponseDto>> Handle(AddGameToFunnySectionCommand request, CancellationToken cancellationToken)
         {
-            var section = await _unitOfWork.Sections.GetByIdAsync(request.SectionId);
-            if (section is null)
-                return Result<AddGameToSectionResponseDto>.NotFound("Section not found");
+            var funnySection = await _unitOfWork.Sections.GetFunnySection();
+            if (funnySection is null)
+                return Result<AddGameToSectionResponseDto>.NotFound("Funny section not found");
 
             var addedGames = new List<string>();
             var failedGames = new List<string>();
@@ -33,7 +33,7 @@ namespace SayyadCo.Application.Features.SectionGames.Commands.AddGameToSection
                     continue;
                 }
 
-                var existing = await _unitOfWork.SectionGames.GetAsync(request.SectionId, gameId);
+                var existing = await _unitOfWork.SectionGames.GetAsync(funnySection.Id, gameId);
                 if (existing is not null)
                 {
                     failedGames.Add($"{gameId}: Already exists");
@@ -42,7 +42,7 @@ namespace SayyadCo.Application.Features.SectionGames.Commands.AddGameToSection
 
                 var sectionGame = new SectionGame()
                 {
-                    SectionId = request.SectionId,
+                    SectionId = funnySection.Id,
                     GameId = gameId
                 };
 

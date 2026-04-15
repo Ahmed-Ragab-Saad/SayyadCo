@@ -1,4 +1,4 @@
-﻿namespace SayyadCo.Application.Features.SectionGames.Queries.GetSectionGames
+﻿namespace SayyadCo.Application.Common.DTOs
 {
     public class GetSectionGamesResponseDto
     {

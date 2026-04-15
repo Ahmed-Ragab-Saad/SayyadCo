@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SayyadCo.Application.Common.DTOs;
 using SayyadCo.Application.Common.Models;
+using SayyadCo.Application.Features.SectionGames.Commands.AddGameToFunnySection;
 using SayyadCo.Application.Features.SectionGames.Commands.AddGameToSection;
 using SayyadCo.Application.Features.SectionGames.Commands.RemoveGameFromSection;
+using SayyadCo.Application.Features.SectionGames.Queries.GetFunnySectionGames;
 using SayyadCo.Application.Features.SectionGames.Queries.GetSectionGames;
 using SayyadCo.Application.Features.Sections.Commands.CreateSection;
 using SayyadCo.Application.Features.Sections.Commands.DeleteSection;
@@ -13,7 +16,7 @@ using SayyadCo.Domain.Common;
 
 namespace SayyadCo.API.Controllers
 {
-    [Authorize(Roles = AppRoles.SuperAdmin)]
+    //[Authorize(Roles = AppRoles.SuperAdmin)]
     public class SectionsController : CustomBaseController
     {
         /// <summary>
@@ -136,29 +139,55 @@ namespace SayyadCo.API.Controllers
         public async Task<IActionResult> GetAll([FromQuery] GetAllSectionsQuery query)
             => HandleResult(await Mediator.Send(query));
 
-        /// <summary>Add game to section</summary>
+        /// <summary>Add games to section</summary>
         /// <remarks>
-        /// Links an existing game to a section.
+        /// Links existing games to a section.
         ///
         /// Sample request:
         ///
-        ///     POST /api/sections/3fa85f64.../games/4gb96g75...
+        ///     POST /api/sections/3fa85f64.../games
+        ///     {
+        ///         "gamesIds": [
+        ///             "4gb96g75...",
+        ///             "6fggin36...",
+        ///             "mo63u8v1..."
+        ///         ]
+        ///     }
         /// </remarks>
         /// <response code="200">Game added to section successfully</response>
-        /// <response code="400">Game already exists in section</response>
         /// <response code="401">Unauthorized</response>
-        /// <response code="404">Section or Game not found</response>
-        [HttpPost("{sectionId}/games/{gameId}")]
+        [HttpPost("{sectionId}/games")]
         [ProducesResponseType(typeof(AddGameToSectionResponseDto), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> AddGame(string sectionId, string gameId)
-            => HandleResult(await Mediator.Send(new AddGameToSectionCommand
-            {
-                SectionId = sectionId,
-                GameId = gameId
-            }));
+        public async Task<IActionResult> AddGame(string sectionId, AddGameToSectionCommand request)
+        {
+            request.SectionId = sectionId;
+            return HandleResult(await Mediator.Send(request));
+        }
+
+        /// <summary>Add games to funny section</summary>
+        /// <remarks>
+        /// Links existing games to a funny section.
+        ///
+        /// Sample request:
+        ///
+        ///     POST /api/sections/funny/games
+        ///     {
+        ///         "gamesIds": [
+        ///             "4gb96g75...",
+        ///             "6fggin36...",
+        ///             "mo63u8v1..."
+        ///         ]
+        ///     }
+        /// 
+        /// </remarks>
+        /// <response code="200">Game added to section successfully</response>
+        /// <response code="401">Unauthorized</response>
+        [HttpPost("funny/games")]
+        [ProducesResponseType(typeof(AddGameToSectionResponseDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+        public async Task<IActionResult> AddGameToFunnySection(AddGameToFunnySectionCommand request)
+            => HandleResult(await Mediator.Send(request));
 
         /// <summary>Remove game from section</summary>
         /// <remarks>
@@ -205,5 +234,22 @@ namespace SayyadCo.API.Controllers
             query.SectionId = sectionId;
             return HandleResult(await Mediator.Send(query));
         }
+
+        /// <summary>Get all games in a funny section</summary>
+        /// <remarks>
+        /// Returns all games linked to a funny section.
+        ///
+        /// Sample request:
+        ///
+        ///     GET /api/sections/funny/games
+        /// </remarks>
+        /// <response code="200">Returns list of games in section</response>
+        /// <response code="401">Unauthorized</response>
+        [HttpGet("funny/games")]
+        [AllowAnonymous]
+        [ProducesResponseType(typeof(PagedResult<GetSectionGamesResponseDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+        public async Task<IActionResult> GatFunnySectionGames([FromQuery] GetFunnySectionGamesQuery query)
+            => HandleResult(await Mediator.Send(query));
     }
 }
