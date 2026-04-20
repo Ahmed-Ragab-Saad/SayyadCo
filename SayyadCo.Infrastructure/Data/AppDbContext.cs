@@ -28,6 +28,7 @@ namespace SayyadCo.Infrastructure.Data
         public DbSet<RefreshToken> RefreshTokens { get; set; }
         public DbSet<OtpCode> OtpCodes { get; set; }
         public DbSet<GameType> GameTypes { get; set; }
+        public DbSet<UserGameRole> UserGameRoles { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

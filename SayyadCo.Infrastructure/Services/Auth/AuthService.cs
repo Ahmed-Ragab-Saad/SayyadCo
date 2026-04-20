@@ -174,5 +174,15 @@ namespace SayyadCo.Infrastructure.Services.Auth
         {
             throw new NotImplementedException();
         }
+
+        public async Task<bool> IsAdminOrSuperAdmin(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user is null)
+                return false;
+
+            return await _userManager.IsInRoleAsync(user, AppRoles.Admin)
+                || await _userManager.IsInRoleAsync(user, AppRoles.SuperAdmin);
+        }
     }
 }

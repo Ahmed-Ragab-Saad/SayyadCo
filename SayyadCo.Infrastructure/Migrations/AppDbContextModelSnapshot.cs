@@ -269,8 +269,18 @@ namespace SayyadCo.Infrastructure.Migrations
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
 
-                    b.Property<string>("GroupId")
+                    b.Property<string>("GameId")
                         .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("GroupId")
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("SectionId")
+                        .IsRequired()
+                        .HasMaxLength(450)
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int?>("Semester")
@@ -302,6 +312,8 @@ namespace SayyadCo.Infrastructure.Migrations
                     b.HasIndex("GroupId");
 
                     b.HasIndex("Status");
+
+                    b.HasIndex("SectionId", "GameId");
 
                     b.ToTable("Exams", (string)null);
                 });
@@ -601,6 +613,14 @@ namespace SayyadCo.Infrastructure.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
+                    b.Property<int>("Points")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
                     b.Property<string>("TestId")
                         .HasColumnType("nvarchar(450)");
 
@@ -617,6 +637,8 @@ namespace SayyadCo.Infrastructure.Migrations
 
                     b.ToTable("Questions", null, t =>
                         {
+                            t.HasCheckConstraint("CK_Points_Min", "Points > 0");
+
                             t.HasCheckConstraint("CK_Question_ExamOrTest", "(ExamId IS NOT NULL AND TestId IS NULL) OR (ExamId IS NULL AND TestId IS NOT NULL)");
                         });
                 });
@@ -825,8 +847,14 @@ namespace SayyadCo.Infrastructure.Migrations
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
 
-                    b.Property<string>("GroupId")
+                    b.Property<string>("GameId")
                         .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("SectionId")
+                        .IsRequired()
+                        .HasMaxLength(450)
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int?>("Semester")
@@ -850,7 +878,7 @@ namespace SayyadCo.Infrastructure.Migrations
 
                     b.HasIndex("CreatedByUserId");
 
-                    b.HasIndex("GroupId");
+                    b.HasIndex("SectionId", "GameId");
 
                     b.ToTable("Tests", (string)null);
                 });
@@ -932,6 +960,30 @@ namespace SayyadCo.Infrastructure.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("SayyadCo.Infrastructure.Identity.UserGameRole", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("GameRoleId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("SectionId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("GameId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("UserId", "GameRoleId", "SectionId");
+
+                    b.HasIndex("GameRoleId");
+
+                    b.HasIndex("SectionId", "GameId");
+
+                    b.ToTable("UserGameRoles", (string)null);
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -994,7 +1046,7 @@ namespace SayyadCo.Infrastructure.Migrations
                     b.HasOne("SayyadCo.Domain.Entities.SectionGame", "SectionGame")
                         .WithMany("Codes")
                         .HasForeignKey("SectionId", "GameId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("GameRole");
@@ -1012,12 +1064,19 @@ namespace SayyadCo.Infrastructure.Migrations
                     b.HasOne("SayyadCo.Domain.Entities.Group", "Group")
                         .WithMany("Exams")
                         .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("SayyadCo.Domain.Entities.SectionGame", "SectionGame")
+                        .WithMany("Exams")
+                        .HasForeignKey("SectionId", "GameId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("AcademicYear");
 
                     b.Navigation("Group");
+
+                    b.Navigation("SectionGame");
                 });
 
             modelBuilder.Entity("SayyadCo.Domain.Entities.Group", b =>
@@ -1025,7 +1084,7 @@ namespace SayyadCo.Infrastructure.Migrations
                     b.HasOne("SayyadCo.Domain.Entities.SectionGame", "SectionGame")
                         .WithMany("Groups")
                         .HasForeignKey("SectionId", "GameId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("SectionGame");
@@ -1047,7 +1106,7 @@ namespace SayyadCo.Infrastructure.Migrations
                     b.HasOne("SayyadCo.Infrastructure.Identity.ApplicationUser", null)
                         .WithMany("OtpCodes")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
@@ -1061,7 +1120,7 @@ namespace SayyadCo.Infrastructure.Migrations
                     b.HasOne("SayyadCo.Domain.Entities.Test", "Test")
                         .WithMany("Questions")
                         .HasForeignKey("TestId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Exam");
 
@@ -1073,7 +1132,7 @@ namespace SayyadCo.Infrastructure.Migrations
                     b.HasOne("SayyadCo.Infrastructure.Identity.ApplicationUser", null)
                         .WithMany("RefreshTokens")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
@@ -1082,13 +1141,13 @@ namespace SayyadCo.Infrastructure.Migrations
                     b.HasOne("SayyadCo.Domain.Entities.Game", "Game")
                         .WithMany("SectionGames")
                         .HasForeignKey("GameId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("SayyadCo.Domain.Entities.Section", "Section")
                         .WithMany("SectionGames")
                         .HasForeignKey("SectionId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Game");
@@ -1101,7 +1160,7 @@ namespace SayyadCo.Infrastructure.Migrations
                     b.HasOne("SayyadCo.Domain.Entities.SectionGame", "SectionGame")
                         .WithMany("StudentGames")
                         .HasForeignKey("SectionId", "GameId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("SectionGame");
@@ -1112,7 +1171,7 @@ namespace SayyadCo.Infrastructure.Migrations
                     b.HasOne("SayyadCo.Domain.Entities.SectionGame", "SectionGame")
                         .WithMany("TeacherGames")
                         .HasForeignKey("SectionId", "GameId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("SectionGame");
@@ -1125,15 +1184,42 @@ namespace SayyadCo.Infrastructure.Migrations
                         .HasForeignKey("AcademicYearId")
                         .OnDelete(DeleteBehavior.SetNull);
 
-                    b.HasOne("SayyadCo.Domain.Entities.Group", "Group")
+                    b.HasOne("SayyadCo.Domain.Entities.SectionGame", "SectionGame")
                         .WithMany("Tests")
-                        .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey("SectionId", "GameId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("AcademicYear");
 
-                    b.Navigation("Group");
+                    b.Navigation("SectionGame");
+                });
+
+            modelBuilder.Entity("SayyadCo.Infrastructure.Identity.UserGameRole", b =>
+                {
+                    b.HasOne("SayyadCo.Domain.Entities.GameRole", "GameRole")
+                        .WithMany()
+                        .HasForeignKey("GameRoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SayyadCo.Infrastructure.Identity.ApplicationUser", "User")
+                        .WithMany("UserGameRoles")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SayyadCo.Domain.Entities.SectionGame", "SectionGame")
+                        .WithMany()
+                        .HasForeignKey("SectionId", "GameId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("GameRole");
+
+                    b.Navigation("SectionGame");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("SayyadCo.Domain.Entities.AcademicYear", b =>
@@ -1163,8 +1249,6 @@ namespace SayyadCo.Infrastructure.Migrations
                     b.Navigation("Exams");
 
                     b.Navigation("Members");
-
-                    b.Navigation("Tests");
                 });
 
             modelBuilder.Entity("SayyadCo.Domain.Entities.Section", b =>
@@ -1176,11 +1260,15 @@ namespace SayyadCo.Infrastructure.Migrations
                 {
                     b.Navigation("Codes");
 
+                    b.Navigation("Exams");
+
                     b.Navigation("Groups");
 
                     b.Navigation("StudentGames");
 
                     b.Navigation("TeacherGames");
+
+                    b.Navigation("Tests");
                 });
 
             modelBuilder.Entity("SayyadCo.Domain.Entities.Test", b =>
@@ -1193,6 +1281,8 @@ namespace SayyadCo.Infrastructure.Migrations
                     b.Navigation("OtpCodes");
 
                     b.Navigation("RefreshTokens");
+
+                    b.Navigation("UserGameRoles");
                 });
 #pragma warning restore 612, 618
         }

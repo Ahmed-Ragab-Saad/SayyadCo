@@ -15,5 +15,6 @@ namespace SayyadCo.Application.Interfaces
         Task<bool> IsLockedOutAsync(string userId);
         Task<RegisterResultModel> RegisterExternalAsync(string firstName, string lastName, string email);
         Task<bool> IsExternalUserAsync(string userId);
+        Task<bool> IsAdminOrSuperAdmin(string userId);
     }
 }

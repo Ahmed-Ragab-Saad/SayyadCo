@@ -18,8 +18,6 @@ namespace SayyadCo.Infrastructure.Data.Configurations
                 .IsRequired(false)
                 .HasMaxLength(500);
 
-
-
             builder.Property(x => x.ExamId)
                 .IsRequired(false);
 
@@ -28,6 +26,9 @@ namespace SayyadCo.Infrastructure.Data.Configurations
 
             builder.Property(x => x.CreatedAt)
                 .IsRequired();
+
+            builder.Property(x => x.Points)
+                .HasDefaultValue(1);
 
             // Indexes
             builder.HasIndex(x => x.ExamId);
@@ -40,6 +41,7 @@ namespace SayyadCo.Infrastructure.Data.Configurations
                     "CK_Question_ExamOrTest",
                     "(ExamId IS NOT NULL AND TestId IS NULL) OR (ExamId IS NULL AND TestId IS NOT NULL)"
                 );
+                t.HasCheckConstraint("CK_Points_Min", "Points > 0");
             });
         }
     }

@@ -14,5 +14,7 @@ namespace SayyadCo.Domain.Entities
         public ICollection<StudentGame> StudentGames { get; set; } = new List<StudentGame>();
         public ICollection<Code> Codes { get; set; } = new List<Code>();
         public ICollection<Group> Groups { get; set; } = new List<Group>();
+        public ICollection<Test> Tests { get; set; } = new List<Test>();
+        public ICollection<Exam> Exams { get; set; } = new List<Exam>();
     }
 }

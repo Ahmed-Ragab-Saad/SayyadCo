@@ -40,7 +40,7 @@ namespace SayyadCo.Infrastructure.Data.Configurations
                 .WithMany(sg => sg.Groups)
                 .HasForeignKey(x => new { x.SectionId, x.GameId })
                 .HasPrincipalKey(sg => new { sg.SectionId, sg.GameId })
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
             // Indexes
             builder.HasIndex(x => x.Name);

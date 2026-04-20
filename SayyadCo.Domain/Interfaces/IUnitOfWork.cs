@@ -9,6 +9,9 @@ namespace SayyadCo.Domain.Interfaces
         ISectoinRepository Sections { get; }
         IGameRepository Games { get; }
         ISectionGameRepository SectionGames { get; }
+        IUserGameRoleRepository UserGameRoles { get; }
+        ITestRepository Tests { get; }
+        IQuestionRepository Questions { get; }
         Task<int> SaveChangesAsync();
     }
 }

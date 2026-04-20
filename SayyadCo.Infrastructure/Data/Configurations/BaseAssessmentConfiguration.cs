@@ -26,9 +26,6 @@ namespace SayyadCo.Infrastructure.Data.Configurations
                 .IsRequired()
                 .HasMaxLength(1000);
 
-            builder.Property(x => x.GroupId)
-                .IsRequired();
-
             builder.Property(x => x.AcademicYearId)
                 .IsRequired(false);
 
@@ -42,8 +39,15 @@ namespace SayyadCo.Infrastructure.Data.Configurations
             builder.Property(x => x.CreatedAt)
                 .IsRequired();
 
+            builder.Property(x => x.SectionId)
+                .IsRequired()
+                .HasMaxLength(450);
+
+            builder.Property(x => x.GameId)
+                .IsRequired()
+                .HasMaxLength(450);
+
             // Indexes
-            builder.HasIndex(x => x.GroupId);
             builder.HasIndex(x => x.AcademicYearId);
             builder.HasIndex(x => x.CreatedByUserId);
             builder.HasIndex(x => x.CreatedAt);

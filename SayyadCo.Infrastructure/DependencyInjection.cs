@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using SayyadCo.Application.Common.Interfaces;
+using SayyadCo.Application.Common.Models;
 using SayyadCo.Application.Interfaces;
 using SayyadCo.Application.Mappings;
 using SayyadCo.Domain.Interfaces;
@@ -14,6 +15,7 @@ using SayyadCo.Infrastructure.Identity;
 using SayyadCo.Infrastructure.Repositories;
 using SayyadCo.Infrastructure.Services.Auth;
 using SayyadCo.Infrastructure.Services.Email;
+using SayyadCo.Infrastructure.Services.GameAccess;
 using System.Text;
 
 namespace SayyadCo.Infrastructure
@@ -75,15 +77,21 @@ namespace SayyadCo.Infrastructure
             services.AddScoped<IUnitOfWork, UnitOfWork.UnitOfWork>();
             services.AddScoped<IJwtGenerator, JwtGenerator>();
             services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IGameAccessService, GameAccessService>();
             services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
             services.AddScoped<ISectoinRepository, SectionRepository>();
             services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<IOtpRepository, OtpRepository>();
             services.AddScoped<IGameRepository, GameRepository>();
             services.AddScoped<ISectionGameRepository, SectionGameRepository>();
+            services.AddScoped<ITestRepository, TestRepository>();
+            services.AddScoped<IQuestionRepository, QuestionRepository>();
+            services.AddScoped<IUserGameRoleRepository, UserGameRoleRepository>();
 
             services.AddScoped<IGoogleAuthService, GoogleAuthService>();
             services.AddHttpClient<IFacebookAuthService, FacebookAuthService>();
+
+            services.AddHttpContextAccessor();
 
             services.Configure<EmailSettings>(configuration.GetSection("EmailSettings"));
             services.Configure<GoogleAuthSettings>(configuration.GetSection("GoogleAuthSettings"));

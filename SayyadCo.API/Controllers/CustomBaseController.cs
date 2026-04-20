@@ -27,6 +27,7 @@ namespace SayyadCo.API.Controllers
                 ResultStatus.Success => Ok(result.Data),
                 ResultStatus.NotFound => NotFound(new ErrorResponse { Error = result.Error }),
                 ResultStatus.Unauthorized => Unauthorized(new ErrorResponse { Error = result.Error }),
+                ResultStatus.Forbidden => StatusCode(403, new ErrorResponse { Error = result.Error }),
                 ResultStatus.ValidationError => BadRequest(result),
                 ResultStatus.UnverifiedEmail => StatusCode(403, new
                 {

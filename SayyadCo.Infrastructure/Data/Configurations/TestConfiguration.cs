@@ -12,12 +12,6 @@ namespace SayyadCo.Infrastructure.Data.Configurations
 
             builder.ToTable("Tests");
 
-            // Relationships
-            builder.HasOne(x => x.Group)
-                .WithMany(g => g.Tests)
-                .HasForeignKey(x => x.GroupId)
-                .OnDelete(DeleteBehavior.Cascade);
-
             builder.HasOne(x => x.AcademicYear)
                 .WithMany(a => a.Tests)
                 .HasForeignKey(x => x.AcademicYearId)
@@ -26,7 +20,13 @@ namespace SayyadCo.Infrastructure.Data.Configurations
             builder.HasMany(x => x.Questions)
                 .WithOne(q => q.Test)
                 .HasForeignKey(q => q.TestId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasOne(x => x.SectionGame)
+                .WithMany(sg => sg.Tests)
+                .HasForeignKey(x => new { x.SectionId, x.GameId })
+                .HasPrincipalKey(sg => new { sg.SectionId, sg.GameId })
+                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

@@ -12,9 +12,13 @@ namespace SayyadCo.Infrastructure.UnitOfWork
         public IOtpRepository Otps { get; }
         public IGameRepository Games { get; }
         public ISectionGameRepository SectionGames { get; }
+        public IUserGameRoleRepository UserGameRoles { get; }
+        public ITestRepository Tests { get; }
+        public IQuestionRepository Questions { get; }
 
         public UnitOfWork(AppDbContext context, IRefreshTokenRepository refreshTokenRepository, IOtpRepository otps,
-             ISectoinRepository sections, IGameRepository games, ISectionGameRepository sectionGames)
+             ISectoinRepository sections, IGameRepository games, ISectionGameRepository sectionGames,
+             IUserGameRoleRepository userGames, ITestRepository tests, IQuestionRepository questions)
         {
             _context = context;
             RefreshTokens = refreshTokenRepository;
@@ -22,6 +26,9 @@ namespace SayyadCo.Infrastructure.UnitOfWork
             Sections = sections;
             Games = games;
             SectionGames = sectionGames;
+            UserGameRoles = userGames;
+            Tests = tests;
+            Questions = questions;
         }
 
         public async Task<int> SaveChangesAsync()

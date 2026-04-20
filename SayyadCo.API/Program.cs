@@ -1,7 +1,9 @@
 ﻿using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.OpenApi.Models;
+using SayyadCo.API.Authorization;
 using SayyadCo.API.Middleware;
 using SayyadCo.Application.Common.Behaviors;
 using SayyadCo.Application.Features.Auth.Commands.Register;
@@ -70,6 +72,20 @@ namespace SayyadCo.API
             builder.Services.AddInfrastructure(builder.Configuration);
 
             builder.Services.AddControllers();
+
+            builder.Services.AddScoped<IAuthorizationHandler, GameRoleAuthorizationHandler>();
+
+            builder.Services.AddAuthorization(options =>
+            {
+                options.AddPolicy(GamePolicies.TeacherOnly, policy =>
+                    policy.Requirements.Add(new GameRoleRequirement("Teacher")));
+
+                options.AddPolicy(GamePolicies.StudentOnly, policy =>
+                    policy.Requirements.Add(new GameRoleRequirement("Student")));
+
+                options.AddPolicy(GamePolicies.TeacherOrStudent, policy =>
+                    policy.Requirements.Add(new GameRoleRequirement("Teacher", "Student")));
+            });
 
             var app = builder.Build();
 

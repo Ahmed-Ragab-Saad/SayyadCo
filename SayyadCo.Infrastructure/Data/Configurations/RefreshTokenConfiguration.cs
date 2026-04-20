@@ -36,7 +36,7 @@ namespace SayyadCo.Infrastructure.Data.Configurations
             builder.HasOne<ApplicationUser>()
                 .WithMany(au => au.RefreshTokens)
                 .HasForeignKey(rt => rt.UserId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

@@ -17,12 +17,16 @@ namespace SayyadCo.Infrastructure.Data.Configurations
                 .IsRequired()
                 .HasDefaultValue(ExamStatus.Pending);
 
+            builder.Property(x => x.GroupId)
+                .HasMaxLength(450);
+
             // Relationships
             builder.HasOne(x => x.Group)
                 .WithMany(g => g.Exams)
                 .HasForeignKey(x => x.GroupId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
+            // Relationships
             builder.HasOne(x => x.AcademicYear)
                 .WithMany(a => a.Exams)
                 .HasForeignKey(x => x.AcademicYearId)
@@ -31,6 +35,12 @@ namespace SayyadCo.Infrastructure.Data.Configurations
             builder.HasMany(x => x.Questions)
                 .WithOne(q => q.Exam)
                 .HasForeignKey(q => q.ExamId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasOne(x => x.SectionGame)
+                .WithMany(sg => sg.Exams)
+                .HasForeignKey(x => new { x.SectionId, x.GameId })
+                .HasPrincipalKey(sg => new { sg.SectionId, sg.GameId })
                 .OnDelete(DeleteBehavior.Restrict);
 
             // Index on Status for filtering

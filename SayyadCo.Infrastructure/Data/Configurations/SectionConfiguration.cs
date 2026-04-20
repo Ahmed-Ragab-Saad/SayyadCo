@@ -31,7 +31,7 @@ namespace SayyadCo.Infrastructure.Data.Configurations
             builder.HasMany(x => x.SectionGames)
                 .WithOne(sg => sg.Section)
                 .HasForeignKey(sg => sg.SectionId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
             // Indexes
             builder.HasIndex(x => x.TitleAr);

@@ -24,5 +24,11 @@
 
         public static Result<T> UnverifiedEmail(string verificationToken)
             => new(default, false, "Email is not verified", ResultStatus.UnverifiedEmail, verificationToken);
+
+        public static Result<T> Unauthorized(string error = "Unauthorized")
+            => new(default, false, error, ResultStatus.Unauthorized);
+
+        public static Result<T> Forbidden(string error)
+            => new(default, false, error, ResultStatus.Forbidden);
     }
 }

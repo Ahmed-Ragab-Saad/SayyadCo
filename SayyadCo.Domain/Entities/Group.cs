@@ -17,7 +17,6 @@ namespace SayyadCo.Domain.Entities
         //Navigation
         public SectionGame SectionGame { get; set; } = null!;
         public ICollection<Exam> Exams { get; set; } = new List<Exam>();
-        public ICollection<Test> Tests { get; set; } = new List<Test>();
         public ICollection<GroupMember> Members { get; set; } = new List<GroupMember>();
     }
 }

@@ -7,6 +7,7 @@
         NotFound,
         Unauthorized,
         ValidationError,
-        UnverifiedEmail
+        UnverifiedEmail,
+        Forbidden
     }
 }
