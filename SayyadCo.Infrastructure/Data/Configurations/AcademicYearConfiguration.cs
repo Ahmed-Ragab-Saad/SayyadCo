@@ -25,7 +25,7 @@ namespace SayyadCo.Infrastructure.Data.Configurations
 
             // Indexes
             builder.HasIndex(x => x.TitleAr);
-            builder.HasIndex(x => x.TitleAr);
+            builder.HasIndex(x => x.TitleEn);
         }
     }
 }

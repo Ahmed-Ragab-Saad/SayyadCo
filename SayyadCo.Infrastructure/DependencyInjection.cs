@@ -87,6 +87,7 @@ namespace SayyadCo.Infrastructure
             services.AddScoped<ITestRepository, TestRepository>();
             services.AddScoped<IQuestionRepository, QuestionRepository>();
             services.AddScoped<IUserGameRoleRepository, UserGameRoleRepository>();
+            services.AddScoped<IAcademicYearRepository, AcademicYearRepository>();
 
             services.AddScoped<IGoogleAuthService, GoogleAuthService>();
             services.AddHttpClient<IFacebookAuthService, FacebookAuthService>();

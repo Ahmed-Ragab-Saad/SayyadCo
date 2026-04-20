@@ -8,7 +8,7 @@ namespace SayyadCo.Domain.Entities
         public string TitleEn { get; set; } = string.Empty;
 
         //Navigations
-        public ICollection<Exam> Exams { get; set; } = new List<Exam>();
+        public ICollection<SectionGameAcademicYear> SectionGameAcademicYears { get; set; } = new List<SectionGameAcademicYear>();
         public ICollection<Test> Tests { get; set; } = new List<Test>();
     }
 }

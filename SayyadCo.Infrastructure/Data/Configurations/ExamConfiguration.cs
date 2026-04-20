@@ -27,10 +27,10 @@ namespace SayyadCo.Infrastructure.Data.Configurations
                 .OnDelete(DeleteBehavior.Restrict);
 
             // Relationships
-            builder.HasOne(x => x.AcademicYear)
-                .WithMany(a => a.Exams)
-                .HasForeignKey(x => x.AcademicYearId)
-                .OnDelete(DeleteBehavior.SetNull);
+            //builder.HasOne(x => x.AcademicYear)
+            //    .WithMany(a => a.Exams)
+            //    .HasForeignKey(x => x.AcademicYearId)
+            //    .OnDelete(DeleteBehavior.SetNull);
 
             builder.HasMany(x => x.Questions)
                 .WithOne(q => q.Exam)

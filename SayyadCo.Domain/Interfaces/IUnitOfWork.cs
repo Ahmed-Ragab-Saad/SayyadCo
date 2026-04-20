@@ -12,6 +12,7 @@ namespace SayyadCo.Domain.Interfaces
         IUserGameRoleRepository UserGameRoles { get; }
         ITestRepository Tests { get; }
         IQuestionRepository Questions { get; }
+        IAcademicYearRepository AcademicYears { get; }
         Task<int> SaveChangesAsync();
     }
 }
