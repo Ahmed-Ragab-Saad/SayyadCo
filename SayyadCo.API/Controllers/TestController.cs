@@ -23,14 +23,12 @@ namespace SayyadCo.API.Controllers
         ///
         /// Sample request:
         ///
-        ///     POST /api/tests
+        ///     POST api/sections/7gv11cne.../games/in19c4dj.../academic-years/an18xc40.../semester/1/tests
         ///     {
         ///         "titleAr": "اختبار الرياضيات",
         ///         "titleEn": "Math Test",
         ///         "descriptionAr": "اختبار في الرياضيات",
         ///         "descriptionEn": "Mathematics Test",
-        ///         "sectionId": "3fa85f64...",
-        ///         "gameId": "4gb96g75..."
         ///         "questions": [
         ///             {
         ///                 "contentJson": "{\"question\":\"كام 2+2؟\",\"options\":[\"3\",\"4\",\"5\"],\"correctIndex\":1}",
@@ -47,18 +45,21 @@ namespace SayyadCo.API.Controllers
         /// <response code="400">Validation error</response>
         /// <response code="401">Unauthorized</response>
         /// <response code="403">Forbidden</response>
-        /// <response code="404">SectionGame not found</response>
-        [HttpPost("tests")]
+        /// <response code="404">SectionGame or academic year not found</response>
+        [HttpPost("academic-years/{academicYearId}/semester/{semester}/tests")]
         [Authorize(Roles = $"{AppRoles.SuperAdmin},{AppRoles.Admin}")]
         [ProducesResponseType(typeof(CreateTestResponseDto), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ValidationErrorResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Create(string sectionId, string gameId, [FromBody] CreateTestCommand command)
+        public async Task<IActionResult> Create(string sectionId, string gameId, string academicYearId, Semester semester,
+            [FromBody] CreateTestCommand command)
         {
             command.SectionId = sectionId;
             command.GameId = gameId;
+            command.AcademicYearId = academicYearId;
+            command.Semester = semester;
             return HandleResult(await Mediator.Send(command));
         }
 
@@ -69,14 +70,12 @@ namespace SayyadCo.API.Controllers
         ///
         /// Sample request:
         ///
-        ///     PUT /api/tests/3fa85f64...
+        ///     PUT api/sections/7gv11cne.../games/in19c4dj.../academic-years/an18xc40.../semester/1/tests/3fa85f64...
         ///     {
         ///         "titleAr": "اختبار الرياضيات",
         ///         "titleEn": "Math Test",
         ///         "descriptionAr": "اختبار في الرياضيات",
         ///         "descriptionEn": "Mathematics Test",
-        ///         "sectionId": "3fa85f64...",
-        ///         "gameId": "4gb96g75..."
         ///         "questions": [
         ///             {
         ///                 "contentJson": "{\"question\":\"كام 2+2؟\",\"options\":[\"3\",\"4\",\"5\"],\"correctIndex\":1}",
@@ -90,20 +89,25 @@ namespace SayyadCo.API.Controllers
         ///     }
         /// </remarks>
         /// <response code="200">Test updated successfully</response>
+        /// <response code="400">Invalid academic year or semester</response>
         /// <response code="401">Unauthorized</response>
         /// <response code="403">Forbidden</response>
         /// <response code="404">Test not found</response>
-        [HttpPut("tests/{testId}")]
+        [HttpPut("academic-years/{academicYearId}/semester/{semester}/tests/{testId}")]
         [Authorize(Roles = $"{AppRoles.SuperAdmin},{AppRoles.Admin}")]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> UpdateTest(string sectionId, string gameId, string testId, [FromBody] UpdateTestCommand command)
+        public async Task<IActionResult> UpdateTest(string sectionId, string gameId, string academicYearId, Semester semester,
+            string testId, [FromBody] UpdateTestCommand command)
         {
             command.SectionId = sectionId;
             command.GameId = gameId;
             command.TestId = testId;
+            command.AcademicYearId = academicYearId;
+            command.Semester = semester;
             return HandleResult(await Mediator.Send(command));
         }
 
@@ -114,24 +118,29 @@ namespace SayyadCo.API.Controllers
         ///
         /// Sample request:
         ///
-        ///     DELETE /api/sections/3fa85f64.../games/4gb96g75.../tests/7ab30t1q...
+        ///     DELETE api/sections/7gv11cne.../games/in19c4dj.../academic-years/an18xc40.../semester/1/tests/7ab30t1q...
         /// </remarks>
         /// <response code="200">Test deleted successfully</response>
+        /// <response code="400">Invalid academic year or semester</response>
         /// <response code="401">Unauthorized</response>
         /// <response code="403">Forbidden</response>
         /// <response code="404">Test not found</response>
-        [HttpDelete("tests/{testId}")]
+        [HttpDelete("academic-years/{academicYearId}/semester/{semester}/tests/{testId}")]
         [Authorize(Roles = $"{AppRoles.SuperAdmin},{AppRoles.Admin}")]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Delete(string sectionId, string gameId, string testId)
+        public async Task<IActionResult> Delete(string sectionId, string gameId, string academicYearId, Semester semester,
+            string testId)
             => HandleResult(await Mediator.Send(new DeleteTestCommand
             {
                 TestId = testId,
                 SectionId = sectionId,
-                GameId = gameId
+                GameId = gameId,
+                AcademicYearId = academicYearId,
+                Semester = semester
             }));
 
 
@@ -174,14 +183,14 @@ namespace SayyadCo.API.Controllers
         ///
         /// Sample request:
         ///
-        ///     GET /api/tests/3fa85f64...
+        ///     GET /api/sections/7gv11cne.../games/in19c4dj.../academic-years/an18xc40.../semester/1/tests/3fa85f64...
         ///
         /// </remarks>
         /// <response code="200">Test retrieved successfully</response>
         /// <response code="401">Unauthorized</response>
         /// <response code="403">Forbidden</response>
         /// <response code="404">Test not found</response>
-        [HttpGet("tests/{testId}")]
+        [HttpGet("academic-years/{academicYearId}/semester/{semester}/tests/{testId}")]
         [ProducesResponseType(typeof(GetTestByIdResponseDto), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]

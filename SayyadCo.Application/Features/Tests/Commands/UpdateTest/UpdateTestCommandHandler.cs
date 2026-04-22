@@ -37,6 +37,12 @@ namespace SayyadCo.Application.Features.Tests.Commands.UpdateTest
             if (test is null)
                 return Result<bool>.NotFound("Test not found");
 
+            if (test.AcademicYearId != request.AcademicYearId)
+                return Result<bool>.Failure("Invalid academic year");
+
+            if (test.Semester != request.Semester)
+                return Result<bool>.Failure("Invalid semester");
+
             _mapper.Map(request, test);
             _unitOfWork.Tests.Update(test);
 

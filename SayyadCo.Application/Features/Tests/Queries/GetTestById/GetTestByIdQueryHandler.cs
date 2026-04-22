@@ -35,6 +35,12 @@ namespace SayyadCo.Application.Features.Tests.Queries.GetTestById
             if (test is null)
                 return Result<GetTestByIdResponseDto>.NotFound("Test not found");
 
+            if (test.AcademicYearId != request.AcademicYearId)
+                return Result<GetTestByIdResponseDto>.Failure("Invalid academic year");
+
+            if (test.Semester != request.Semester)
+                return Result<GetTestByIdResponseDto>.Failure("Invalid semester");
+
             var access = await _gameAccessService.CheckAccessAsync(userId, request.SectionId, request.GameId);
             if (!access.HasAccess)
                 return Result<GetTestByIdResponseDto>.Forbidden("You are not subscribed to this game");

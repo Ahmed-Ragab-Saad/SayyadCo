@@ -1,10 +1,10 @@
 ﻿using FluentValidation;
 
-namespace SayyadCo.Application.Features.Tests.Commands.CreateTest
+namespace SayyadCo.Application.Features.Tests.Commands.UpdateTest
 {
-    public class CreateTestCommandValidator : AbstractValidator<CreateTestCommand>
+    public class UpdateTestCommandValidator : AbstractValidator<UpdateTestCommand>
     {
-        public CreateTestCommandValidator()
+        public UpdateTestCommandValidator()
         {
             RuleFor(x => x.TitleAr).NotEmpty().MaximumLength(200);
             RuleFor(x => x.TitleEn).NotEmpty().MaximumLength(200);

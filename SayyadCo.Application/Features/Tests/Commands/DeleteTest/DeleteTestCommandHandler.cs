@@ -1,6 +1,4 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Http;
-using SayyadCo.Application.Common.Models;
 using SayyadCo.Application.Common.Results;
 using SayyadCo.Domain.Interfaces;
 
@@ -9,8 +7,6 @@ namespace SayyadCo.Application.Features.Tests.Commands.DeleteTest
     public class DeleteTestCommandHandler : IRequestHandler<DeleteTestCommand, Result<bool>>
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IGameAccessService _gameAccessService;
-        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public DeleteTestCommandHandler(IUnitOfWork unitOfWork)
         {
@@ -25,6 +21,12 @@ namespace SayyadCo.Application.Features.Tests.Commands.DeleteTest
 
             if (test.SectionId != request.SectionId || test.GameId != request.GameId)
                 return Result<bool>.NotFound("Test not found in this SectionGame");
+
+            if (test.AcademicYearId != request.AcademicYearId)
+                return Result<bool>.Failure("Invalid academic year");
+
+            if (test.Semester != request.Semester)
+                return Result<bool>.Failure("Invalid semester");
 
             _unitOfWork.Tests.Remove(test);
             await _unitOfWork.SaveChangesAsync();
