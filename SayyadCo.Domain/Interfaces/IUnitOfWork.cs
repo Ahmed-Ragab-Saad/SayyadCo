@@ -14,6 +14,8 @@ namespace SayyadCo.Domain.Interfaces
         IQuestionRepository Questions { get; }
         IAcademicYearRepository AcademicYears { get; }
         ISectionGameAcademicYearRepository SectionGameAcademicYears { get; }
+        IGroupRepository Groups { get; }
+        IExamRepository Exams { get; }
         Task<int> SaveChangesAsync();
     }
 }
