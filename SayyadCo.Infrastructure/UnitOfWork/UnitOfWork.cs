@@ -16,11 +16,12 @@ namespace SayyadCo.Infrastructure.UnitOfWork
         public ITestRepository Tests { get; }
         public IQuestionRepository Questions { get; }
         public IAcademicYearRepository AcademicYears { get; }
+        public ISectionGameAcademicYearRepository SectionGameAcademicYears { get; }
 
         public UnitOfWork(AppDbContext context, IRefreshTokenRepository refreshTokenRepository, IOtpRepository otps,
              ISectoinRepository sections, IGameRepository games, ISectionGameRepository sectionGames,
              IUserGameRoleRepository userGames, ITestRepository tests, IQuestionRepository questions,
-             IAcademicYearRepository academicYears)
+             IAcademicYearRepository academicYears, ISectionGameAcademicYearRepository sectionGameAcademicYears)
         {
             _context = context;
             RefreshTokens = refreshTokenRepository;
@@ -32,6 +33,7 @@ namespace SayyadCo.Infrastructure.UnitOfWork
             Tests = tests;
             Questions = questions;
             AcademicYears = academicYears;
+            SectionGameAcademicYears = sectionGameAcademicYears;
         }
 
         public async Task<int> SaveChangesAsync()

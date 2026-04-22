@@ -29,6 +29,7 @@ namespace SayyadCo.Infrastructure.Data
         public DbSet<OtpCode> OtpCodes { get; set; }
         public DbSet<GameType> GameTypes { get; set; }
         public DbSet<UserGameRole> UserGameRoles { get; set; }
+        public DbSet<SectionGameAcademicYear> SectionGameAcademicYears { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

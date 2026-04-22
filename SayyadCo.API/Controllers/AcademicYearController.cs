@@ -109,7 +109,7 @@ namespace SayyadCo.API.Controllers
         ///
         /// Sample request:
         ///
-        ///     GET /api/academic-years?pageNumber=1&amp;pageSize=10&amp;searchTerm=million&amp;orderBy=titleEn&amp;isDescending=false
+        ///     GET /api/academic-years?pageNumber=1&amp;pageSize=10&amp;searchTerm=first&amp;orderBy=titleEn&amp;isDescending=false
         /// </remarks>
         /// <response code="200">Returns paginated list of games</response>
         /// <response code="401">Unauthorized</response>

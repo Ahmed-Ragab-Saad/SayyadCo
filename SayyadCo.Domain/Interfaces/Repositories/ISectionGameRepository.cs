@@ -10,5 +10,6 @@ namespace SayyadCo.Domain.Interfaces.Repositories
         Task<PagedResult<SectionGame>> GetBySectionIdAsync(string sectionId, QueryParameters parameters);
         Task<PagedResult<SectionGame>> GetFunnyGames(QueryParameters parameters);
         void Remove(SectionGame sectionGame);
+        Task<bool> ExistingAsync(string sectionId, string gameId);
     }
 }

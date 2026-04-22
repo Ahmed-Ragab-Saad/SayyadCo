@@ -36,6 +36,9 @@ namespace SayyadCo.Infrastructure.Repositories
         public async Task<T?> GetByIdAsync(string id)
             => await GetByIdQueryable().FirstOrDefaultAsync(e => e.Id == id);
 
+        public Task<bool> ExistingAsync(string id)
+            => _dbSet.AnyAsync(e => e.Id == id);
+
         public async Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate)
             => await _dbSet.Where(predicate).ToListAsync();
 

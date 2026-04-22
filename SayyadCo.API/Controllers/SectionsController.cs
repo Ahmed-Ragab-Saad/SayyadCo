@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SayyadCo.Application.Common.DTOs;
 using SayyadCo.Application.Common.Models;
+using SayyadCo.Application.Features.SectionGames.Commands.AddAcademicYear;
 using SayyadCo.Application.Features.SectionGames.Commands.AddGameToFunnySection;
 using SayyadCo.Application.Features.SectionGames.Commands.AddGameToSection;
 using SayyadCo.Application.Features.SectionGames.Commands.RemoveGameFromSection;
@@ -134,6 +135,7 @@ namespace SayyadCo.API.Controllers
         /// <response code="200">Returns paginated list of sections</response>
         /// <response code="401">Unauthorized</response>
         [HttpGet]
+        [AllowAnonymous]
         [ProducesResponseType(typeof(PagedResult<GetAllSectionsResponseDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> GetAll([FromQuery] GetAllSectionsQuery query)
@@ -164,6 +166,29 @@ namespace SayyadCo.API.Controllers
             request.SectionId = sectionId;
             return HandleResult(await Mediator.Send(request));
         }
+
+        /// <summary>Add academic year to a section game</summary>
+        /// <remarks>
+        /// Links existing academic year to a section game.
+        ///
+        /// Sample request:
+        ///
+        ///     POST /api/sections/3fa85f64.../games/d7ak37c1.../academic-years/8avz5d9a...
+        /// </remarks>
+        /// <response code="200">Game added to section successfully</response>
+        /// <response code="401">Unauthorized</response>
+        /// <response code="404">Section, game, or academic year not found</response>
+        [HttpPost("{sectionId}/games/{gameId}/academic-years/{academicYearId}")]
+        [ProducesResponseType(typeof(AddGameToSectionResponseDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> AddacademicYearToGame(string sectionId, string gameId, string academicYearId)
+            => HandleResult(await Mediator.Send(new AddAcademicYearToSectionGameCommand()
+            {
+                SectionId = sectionId,
+                GameId = gameId,
+                AcademicYearId = academicYearId
+            }));
 
         /// <summary>Add games to funny section</summary>
         /// <remarks>
@@ -229,11 +254,11 @@ namespace SayyadCo.API.Controllers
         [ProducesResponseType(typeof(PagedResult<GetSectionGamesResponseDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetGames([FromRoute] string sectionId, [FromQuery] GetSectionGamesQuery query)
-        {
-            query.SectionId = sectionId;
-            return HandleResult(await Mediator.Send(query));
-        }
+        public async Task<IActionResult> GetGames([FromRoute] string sectionId)
+            => HandleResult(await Mediator.Send(new GetSectionGamesQuery()
+            {
+                SectionId = sectionId
+            }));
 
         /// <summary>Get all games in a funny section</summary>
         /// <remarks>

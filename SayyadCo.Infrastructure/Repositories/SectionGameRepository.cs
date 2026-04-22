@@ -19,6 +19,7 @@ namespace SayyadCo.Infrastructure.Repositories
         public async Task AddAsync(SectionGame sectionGame)
             => await _context.SectionGames.AddAsync(sectionGame);
 
+
         public async Task<SectionGame?> GetAsync(string sectionId, string gameId)
             => await _context.SectionGames
                 .Include(sg => sg.Section)
@@ -44,6 +45,9 @@ namespace SayyadCo.Infrastructure.Repositories
 
         public void Remove(SectionGame sectionGame)
             => _context.SectionGames.Remove(sectionGame);
+
+        public Task<bool> ExistingAsync(string sectionId, string gameId)
+            => _context.SectionGames.AnyAsync(sg => sg.SectionId == sectionId && sg.GameId == gameId);
 
         private async Task<PagedResult<SectionGame>> PaginateSectionGames(string sectionId, QueryParameters parameters)
         {
