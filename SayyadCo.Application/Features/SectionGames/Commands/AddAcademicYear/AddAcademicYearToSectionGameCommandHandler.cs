@@ -31,6 +31,8 @@ namespace SayyadCo.Application.Features.SectionGames.Commands.AddAcademicYear
                 GameId = request.GameId
             });
 
+            await _unitOfWork.SaveChangesAsync();
+
             return Result<bool>.Success(true);
         }
     }

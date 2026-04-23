@@ -35,11 +35,25 @@ namespace SayyadCo.Infrastructure.Data.Configurations
             builder.Property(x => x.CreatedAt)
                 .IsRequired();
 
+            builder.Property(x => x.AcademicYearId)
+                .IsRequired()
+                .HasMaxLength(450);
+
+            builder.Property(x => x.Semester)
+                .IsRequired()
+                .HasConversion<int>();
+
             //Relashins
             builder.HasOne(x => x.SectionGame)
                 .WithMany(sg => sg.Groups)
                 .HasForeignKey(x => new { x.SectionId, x.GameId })
                 .HasPrincipalKey(sg => new { sg.SectionId, sg.GameId })
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasOne(x => x.SectionGameAcademicYear)
+                .WithMany(sga => sga.Groups)
+                .HasForeignKey(x => new { x.SectionId, x.GameId, x.AcademicYearId })
+                .HasPrincipalKey(sga => new { sga.SectionId, sga.GameId, sga.AcademicYearId })
                 .OnDelete(DeleteBehavior.Restrict);
 
             // Indexes

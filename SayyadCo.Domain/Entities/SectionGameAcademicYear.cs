@@ -10,5 +10,6 @@ namespace SayyadCo.Domain.Entities
 
         public SectionGame SectionGame { get; set; } = null!;
         public AcademicYear AcademicYear { get; set; } = null!;
+        public ICollection<Group> Groups { get; set; } = new List<Group>();
     }
 }

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SayyadCo.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using SayyadCo.Infrastructure.Data;
 namespace SayyadCo.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260423113429_UpdateGroupEntity")]
+    partial class UpdateGroupEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -424,7 +427,7 @@ namespace SayyadCo.Infrastructure.Migrations
 
                     b.Property<string>("CreatedByUserId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -470,6 +473,9 @@ namespace SayyadCo.Infrastructure.Migrations
                     b.HasIndex("Name");
 
                     b.HasIndex("SectionId", "GameId", "AcademicYearId");
+
+                    b.HasIndex("CreatedByUserId", "SectionId", "GameId", "AcademicYearId", "Semester")
+                        .IsUnique();
 
                     b.ToTable("Groups", (string)null);
                 });

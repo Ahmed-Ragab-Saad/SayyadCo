@@ -16,6 +16,7 @@ namespace SayyadCo.Domain.Interfaces
         ISectionGameAcademicYearRepository SectionGameAcademicYears { get; }
         IGroupRepository Groups { get; }
         IExamRepository Exams { get; }
+        IGroupMemberRepository GroupMembers { get; }
         Task<int> SaveChangesAsync();
     }
 }
