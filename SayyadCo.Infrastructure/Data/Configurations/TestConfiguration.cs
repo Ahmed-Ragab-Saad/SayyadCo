@@ -15,7 +15,7 @@ namespace SayyadCo.Infrastructure.Data.Configurations
             builder.HasOne(x => x.AcademicYear)
                 .WithMany(a => a.Tests)
                 .HasForeignKey(x => x.AcademicYearId)
-                .OnDelete(DeleteBehavior.SetNull);
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasMany(x => x.Questions)
                 .WithOne(q => q.Test)
@@ -26,7 +26,7 @@ namespace SayyadCo.Infrastructure.Data.Configurations
                 .WithMany(sg => sg.Tests)
                 .HasForeignKey(x => new { x.SectionId, x.GameId })
                 .HasPrincipalKey(sg => new { sg.SectionId, sg.GameId })
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

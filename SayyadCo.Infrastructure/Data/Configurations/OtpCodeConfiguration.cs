@@ -30,7 +30,7 @@ namespace SayyadCo.Infrastructure.Data.Configurations
             builder.HasOne<ApplicationUser>()
                 .WithMany(au => au.OtpCodes)
                 .HasForeignKey(o => o.UserId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasIndex(o => o.UserId);
             builder.HasIndex(o => new { o.UserId, o.Code });

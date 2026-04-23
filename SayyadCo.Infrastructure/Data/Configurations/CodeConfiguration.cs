@@ -43,12 +43,12 @@ namespace SayyadCo.Infrastructure.Data.Configurations
                 .WithMany(sg => sg.Codes)
                 .HasForeignKey(x => new { x.SectionId, x.GameId })
                 .HasPrincipalKey(sg => new { sg.SectionId, sg.GameId })
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasOne(x => x.GameRole)
                 .WithMany(gr => gr.Codes)
                 .HasForeignKey(x => x.GameRoleId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
             // Indexes
             builder.HasIndex(x => x.Value).IsUnique();

@@ -24,7 +24,7 @@ namespace SayyadCo.Infrastructure.Data.Configurations
             builder.HasOne(x => x.Group)
                 .WithMany(g => g.Exams)
                 .HasForeignKey(x => x.GroupId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
             // Relationships
             //builder.HasOne(x => x.AcademicYear)

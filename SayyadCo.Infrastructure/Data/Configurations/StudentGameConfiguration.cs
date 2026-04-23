@@ -17,7 +17,7 @@ namespace SayyadCo.Infrastructure.Data.Configurations
                 .WithMany(sg => sg.StudentGames)
                 .HasForeignKey(x => new { x.SectionId, x.GameId })
                 .HasPrincipalKey(sg => new { sg.SectionId, sg.GameId })
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

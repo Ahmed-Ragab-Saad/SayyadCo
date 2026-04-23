@@ -26,7 +26,7 @@ namespace SayyadCo.Infrastructure.Data.Configurations
             builder.HasOne(x => x.AcademicYear)
                 .WithMany(x => x.SectionGameAcademicYears)
                 .HasForeignKey(x => x.AcademicYearId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

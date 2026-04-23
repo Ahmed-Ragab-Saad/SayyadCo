@@ -48,13 +48,13 @@ namespace SayyadCo.Infrastructure.Data.Configurations
                 .WithMany(sg => sg.Groups)
                 .HasForeignKey(x => new { x.SectionId, x.GameId })
                 .HasPrincipalKey(sg => new { sg.SectionId, sg.GameId })
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.NoAction);
 
             builder.HasOne(x => x.SectionGameAcademicYear)
                 .WithMany(sga => sga.Groups)
                 .HasForeignKey(x => new { x.SectionId, x.GameId, x.AcademicYearId })
                 .HasPrincipalKey(sga => new { sga.SectionId, sga.GameId, sga.AcademicYearId })
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
             // Indexes
             builder.HasIndex(x => x.Name);
