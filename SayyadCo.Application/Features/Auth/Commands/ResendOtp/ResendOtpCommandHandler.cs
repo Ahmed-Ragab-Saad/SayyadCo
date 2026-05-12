@@ -5,6 +5,7 @@ using SayyadCo.Application.Common.Results;
 using SayyadCo.Application.Common.Templates;
 using SayyadCo.Application.Interfaces;
 using SayyadCo.Domain.Entities;
+using SayyadCo.Domain.Enums;
 using SayyadCo.Domain.Interfaces;
 using System.Security.Cryptography;
 
@@ -53,13 +54,14 @@ namespace SayyadCo.Application.Features.Auth.Commands.ResendOtp
                 UserId = otp.UserId,
                 Code = newOtpCode,
                 ExpiresAt = DateTime.UtcNow.AddMinutes(10),
-                LastResendAt = DateTime.UtcNow
+                LastResendAt = DateTime.UtcNow,
+                Type = OtpType.EmailVerification
             };
 
             await _unitOfWork.Otps.AddAsync(newOtpEntity);
             await _unitOfWork.SaveChangesAsync();
 
-            await _emailService.SendAsync(user.Email, EmailTemplates.OtpTemplate(newOtpCode, user.FirstName));
+            await _emailService.SendAsync(user.Email, EmailTemplates.VerifyEmailOtpTemplate(newOtpCode, user.FirstName));
 
             return Result<ResendOtpResponseDto>.Success(new ResendOtpResponseDto
             {

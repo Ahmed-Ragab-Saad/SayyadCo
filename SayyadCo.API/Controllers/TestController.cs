@@ -195,13 +195,16 @@ namespace SayyadCo.API.Controllers
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetTestById(string sectionId, string gameId, string testId)
+        public async Task<IActionResult> GetTestById(string sectionId, string gameId, string academicYearId,
+            Semester semester, string testId)
         {
             return HandleResult(await Mediator.Send(new GetTestByIdQuery
             {
-                TestId = testId,
                 SectionId = sectionId,
-                GameId = gameId
+                GameId = gameId,
+                AcademicYearId = academicYearId,
+                Semester = semester,
+                TestId = testId
             }));
         }
     }

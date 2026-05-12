@@ -38,7 +38,8 @@ namespace SayyadCo.Infrastructure.Services.Auth
                 Id = user.Id,
                 Email = user.Email!,
                 FirstName = user.FirstName,
-                LastName = user.LastName
+                LastName = user.LastName,
+                OtpLockedUntil = user.OtpLockedUntil
             };
         }
 
@@ -183,6 +184,16 @@ namespace SayyadCo.Infrastructure.Services.Auth
 
             return await _userManager.IsInRoleAsync(user, AppRoles.Admin)
                 || await _userManager.IsInRoleAsync(user, AppRoles.SuperAdmin);
+        }
+
+        public async Task<bool> ResetPasswordAsync(string userId, string newPassword)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user is null) return false;
+
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var result = await _userManager.ResetPasswordAsync(user, token, newPassword);
+            return result.Succeeded;
         }
     }
 }

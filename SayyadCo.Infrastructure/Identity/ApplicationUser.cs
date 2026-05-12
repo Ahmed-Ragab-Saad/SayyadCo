@@ -8,6 +8,7 @@ namespace SayyadCo.Infrastructure.Identity
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
         public string Image { get; set; } = string.Empty;
+        public DateTime? OtpLockedUntil { get; set; }
 
         public ICollection<UserGameRole> UserGameRoles { get; set; } = new List<UserGameRole>();
         public ICollection<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();

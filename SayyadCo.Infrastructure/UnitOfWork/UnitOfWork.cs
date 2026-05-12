@@ -20,12 +20,14 @@ namespace SayyadCo.Infrastructure.UnitOfWork
         public IGroupRepository Groups { get; }
         public IExamRepository Exams { get; }
         public IGroupMemberRepository GroupMembers { get; }
+        public IExamUpdateRequestRepository ExamUpdateRequests { get; }
 
         public UnitOfWork(AppDbContext context, IRefreshTokenRepository refreshTokenRepository, IOtpRepository otps,
              ISectoinRepository sections, IGameRepository games, ISectionGameRepository sectionGames,
              IUserGameRoleRepository userGames, ITestRepository tests, IQuestionRepository questions,
              IAcademicYearRepository academicYears, ISectionGameAcademicYearRepository sectionGameAcademicYears,
-             IGroupRepository groups, IExamRepository exams, IGroupMemberRepository groupMembers)
+             IGroupRepository groups, IExamRepository exams, IGroupMemberRepository groupMembers,
+             IExamUpdateRequestRepository examUpdateRequests)
         {
             _context = context;
             RefreshTokens = refreshTokenRepository;
@@ -41,6 +43,7 @@ namespace SayyadCo.Infrastructure.UnitOfWork
             Groups = groups;
             Exams = exams;
             GroupMembers = groupMembers;
+            ExamUpdateRequests = examUpdateRequests;
         }
 
         public async Task<int> SaveChangesAsync()

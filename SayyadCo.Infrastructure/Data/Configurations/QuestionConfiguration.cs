@@ -10,10 +10,6 @@ namespace SayyadCo.Infrastructure.Data.Configurations
         {
             builder.HasKey(x => x.Id);
 
-            builder.Property(x => x.Title)
-                .IsRequired()
-                .HasMaxLength(500);
-
             builder.Property(x => x.Image)
                 .IsRequired(false)
                 .HasMaxLength(500);

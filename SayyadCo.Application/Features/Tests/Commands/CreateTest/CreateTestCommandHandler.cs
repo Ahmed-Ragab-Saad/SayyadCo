@@ -49,7 +49,6 @@ namespace SayyadCo.Application.Features.Tests.Commands.CreateTest
             var questionList = request.Questions
                 .Select(q => new Question
                 {
-                    Title = q.Title,
                     Image = q.Image,
                     ContentJson = q.ContentJson,
                     TestId = test.Id

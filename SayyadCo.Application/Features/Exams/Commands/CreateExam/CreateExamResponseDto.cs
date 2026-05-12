@@ -1,5 +1,4 @@
-﻿using SayyadCo.Application.Features.Tests.Commands.AddQuestions;
-using SayyadCo.Domain.Enums;
+﻿using SayyadCo.Domain.Enums;
 
 namespace SayyadCo.Application.Features.Exams.Commands.CreateExam
 {
@@ -15,6 +14,6 @@ namespace SayyadCo.Application.Features.Exams.Commands.CreateExam
         public Semester Semester { get; set; }
         public ExamStatus Status { get; set; }
         public string CreatedByUserId { get; set; } = string.Empty;
-        public List<AddQuestionResponseDto> Questions { get; set; } = new();
+        public List<ExamQuestionsResponse> Questions { get; set; } = new();
     }
 }

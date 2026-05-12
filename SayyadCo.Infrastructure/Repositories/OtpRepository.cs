@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SayyadCo.Domain.Entities;
+using SayyadCo.Domain.Enums;
 using SayyadCo.Domain.Interfaces.Repositories;
 using SayyadCo.Infrastructure.Data;
 
@@ -36,5 +37,24 @@ namespace SayyadCo.Infrastructure.Repositories
         public async Task<OtpCode?> GetByTokenAsync(string token)
             => await _context.OtpCodes
                 .FirstOrDefaultAsync(o => o.Token == token && !o.IsUsed);
+
+        public async Task<IEnumerable<OtpCode>> GetByUserIdAndType(string userId, OtpType type)
+            => await _context.OtpCodes
+                .Where(o => o.UserId == userId && o.Type == type)
+                .ToListAsync();
+
+        public async Task<OtpCode?> GetByTokenAndTypeAsync(string token, OtpType type)
+            => await _context.OtpCodes
+                .FirstOrDefaultAsync(o => o.Token == token && o.Type == type);
+
+        public async Task InvalidateUserOtpsByTypeAsync(string userId, OtpType type)
+        {
+            var otps = await _context.OtpCodes
+                .Where(o => o.UserId == userId && o.Type == type && !o.IsUsed)
+                .ToListAsync();
+
+            foreach (var otp in otps)
+                otp.IsUsed = true;
+        }
     }
 }

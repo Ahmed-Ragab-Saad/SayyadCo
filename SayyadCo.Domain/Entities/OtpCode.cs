@@ -1,4 +1,5 @@
 ﻿using SayyadCo.Domain.Common;
+using SayyadCo.Domain.Enums;
 
 namespace SayyadCo.Domain.Entities
 {
@@ -7,6 +8,7 @@ namespace SayyadCo.Domain.Entities
         public string UserId { get; set; } = string.Empty;
         public string Code { get; set; } = string.Empty;
         public string Token { get; set; } = Guid.NewGuid().ToString();
+        public OtpType Type { get; set; } = OtpType.EmailVerification;
         public DateTime ExpiresAt { get; set; }
         public bool IsUsed { get; set; } = false;
         public int FailedAttempts { get; set; } = 0;

@@ -58,7 +58,7 @@ namespace SayyadCo.Application.Features.Auth.Commands.Login
                 await _unitOfWork.Otps.AddAsync(otpEntity);
                 await _unitOfWork.SaveChangesAsync();
 
-                await _emailService.SendAsync(user.Email, EmailTemplates.OtpTemplate(otpCode, user.FirstName));
+                await _emailService.SendAsync(user.Email, EmailTemplates.VerifyEmailOtpTemplate(otpCode, user.FirstName));
 
                 return Result<LoginResponseDto>.UnverifiedEmail(otpEntity.Token);
             }

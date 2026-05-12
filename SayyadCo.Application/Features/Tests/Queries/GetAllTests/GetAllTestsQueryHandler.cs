@@ -41,6 +41,11 @@ namespace SayyadCo.Application.Features.Tests.Queries.GetAllTests
 
             var mappedItems = _mapper.Map<IEnumerable<GetAllTestsResponseDto>>(tests.Items);
 
+            foreach (var item in mappedItems)
+            {
+                item.QuestionsCount = await _unitOfWork.Questions.GetQuestionsCount(item.Id);
+            }
+
             var result = new PagedResult<GetAllTestsResponseDto>(
                 mappedItems,
                 tests.TotalCount,

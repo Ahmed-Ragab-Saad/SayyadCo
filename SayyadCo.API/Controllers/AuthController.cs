@@ -1,12 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SayyadCo.Application.Common.Models;
 using SayyadCo.Application.Features.Auth.Commands.FacebookLogin;
+using SayyadCo.Application.Features.Auth.Commands.ForgetPassword;
 using SayyadCo.Application.Features.Auth.Commands.GoogleLogin;
 using SayyadCo.Application.Features.Auth.Commands.Login;
 using SayyadCo.Application.Features.Auth.Commands.RefreshToken;
 using SayyadCo.Application.Features.Auth.Commands.Register;
 using SayyadCo.Application.Features.Auth.Commands.ResendOtp;
+using SayyadCo.Application.Features.Auth.Commands.ResendResetPasswordOtp;
+using SayyadCo.Application.Features.Auth.Commands.ResetPassword;
 using SayyadCo.Application.Features.Auth.Commands.VerifyEmail;
+using SayyadCo.Application.Features.Auth.Commands.VerifyResetOtp;
 
 namespace SayyadCo.API.Controllers
 {
@@ -193,6 +197,99 @@ namespace SayyadCo.API.Controllers
         [ProducesResponseType(typeof(FacebookLoginResponseDto), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> FacebookLogin([FromBody] FacebookLoginCommand command)
+            => HandleResult(await Mediator.Send(command));
+
+        /// <summary>Forgot password</summary>
+        /// <remarks>
+        /// Sends a 6-digit OTP to the user's email to reset their password.
+        /// The returned `resetToken` is required for the reset password step.
+        ///
+        /// Sample request:
+        ///
+        ///     POST /api/auth/forgot-password
+        ///     {
+        ///         "email": "ahmed@example.com"
+        ///     }
+        /// </remarks>
+        /// <response code="200">OTP sent successfully</response>
+        /// <response code="400">Validation error</response>
+        /// <response code="404">Email not found</response>
+        [HttpPost("forgot-password")]
+        [ProducesResponseType(typeof(ForgotPasswordResponseDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ValidationErrorResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordCommand command)
+            => HandleResult(await Mediator.Send(command));
+
+        /// <summary>Verify reset OTP</summary>
+        /// <remarks>
+        /// Verifies the OTP sent to the user's email.
+        /// On success, returns a passwordResetToken to be used in the reset password step.
+        ///
+        /// Sample request:
+        ///
+        ///     POST /api/auth/verify-reset-otp
+        ///     {
+        ///         "resetToken": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        ///         "otpCode": "123456"
+        ///     }
+        /// </remarks>
+        /// <response code="200">OTP verified, returns passwordResetToken</response>
+        /// <response code="400">Invalid or expired OTP</response>
+        /// <response code="404">Reset token not found</response>
+        [HttpPost("verify-reset-otp")]
+        [ProducesResponseType(typeof(VerifyResetOtpResponseDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ValidationErrorResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> VerifyResetOtp([FromBody] VerifyResetOtpCommand command)
+            => HandleResult(await Mediator.Send(command));
+
+
+        /// <summary>Reset password</summary>
+        /// <remarks>
+        /// Resets the user's password using the passwordResetToken received after OTP verification.
+        ///
+        /// Sample request:
+        ///
+        ///     POST /api/auth/reset-password
+        ///     {
+        ///         "passwordResetToken": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        ///         "newPassword": "NewPassword@123",
+        ///         "confirmPassword": "NewPassword@123"
+        ///     }
+        /// </remarks>
+        /// <response code="200">Password reset successfully</response>
+        /// <response code="400">Passwords don't match</response>
+        /// <response code="404">Invalid or expired reset token</response>
+        [HttpPost("reset-password")]
+        [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ValidationErrorResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordCommand command)
+            => HandleResult(await Mediator.Send(command));
+
+        /// <summary>Resend reset password OTP</summary>
+        /// <remarks>
+        /// Resends a new OTP to the user's email for password reset.
+        ///
+        /// - Can only be requested **once per minute**
+        /// - New OTP expires after **10 minutes**
+        ///
+        /// Sample request:
+        ///
+        ///     POST /api/auth/resend-reset-otp
+        ///     {
+        ///         "resetToken": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+        ///     }
+        /// </remarks>
+        /// <response code="200">New OTP sent successfully</response>
+        /// <response code="400">Resend cooldown active or account locked</response>
+        /// <response code="404">Reset token not found</response>
+        [HttpPost("resend-reset-otp")]
+        [ProducesResponseType(typeof(ResendResetPasswordOtpResponseDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> ResendResetOtp([FromBody] ResendResetPasswordOtpCommand command)
             => HandleResult(await Mediator.Send(command));
     }
 }

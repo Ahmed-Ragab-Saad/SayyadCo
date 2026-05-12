@@ -5,6 +5,7 @@ using SayyadCo.Application.Common.Templates;
 using SayyadCo.Application.Interfaces;
 using SayyadCo.Domain.Common;
 using SayyadCo.Domain.Entities;
+using SayyadCo.Domain.Enums;
 using SayyadCo.Domain.Interfaces;
 using System.Security.Cryptography;
 
@@ -42,13 +43,14 @@ namespace SayyadCo.Application.Features.Auth.Commands.Register
                 UserId = result.UserId,
                 Code = otpCode,
                 ExpiresAt = DateTime.UtcNow.AddMinutes(10),
-                LastResendAt = DateTime.UtcNow
+                LastResendAt = DateTime.UtcNow,
+                Type = OtpType.EmailVerification
             };
             await _unitOfWork.Otps.AddAsync(otpEntity);
 
             await _unitOfWork.SaveChangesAsync();
 
-            var emailBody = EmailTemplates.OtpTemplate(otpCode, request.FirstName.Trim());
+            var emailBody = EmailTemplates.VerifyEmailOtpTemplate(otpCode, request.FirstName.Trim());
             await _emailService.SendAsync(request.Email, emailBody);
 
             return Result<RegisterResponseDto>.Success(new RegisterResponseDto

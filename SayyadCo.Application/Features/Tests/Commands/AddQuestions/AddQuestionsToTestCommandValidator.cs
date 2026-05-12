@@ -14,7 +14,6 @@ namespace SayyadCo.Application.Features.Tests.Commands.AddQuestions
 
             RuleForEach(x => x.Questions).ChildRules(q =>
             {
-                q.RuleFor(x => x.Title).NotEmpty();
                 q.RuleFor(x => x.ContentJson).NotEmpty();
                 q.RuleFor(x => x.Points).GreaterThan(0);
             });

@@ -4,6 +4,7 @@ using SayyadCo.Application.Common.Interfaces;
 using SayyadCo.Application.Common.Models;
 using SayyadCo.Application.Common.Results;
 using SayyadCo.Application.Interfaces;
+using SayyadCo.Domain.Enums;
 using SayyadCo.Domain.Interfaces;
 
 namespace SayyadCo.Application.Features.Auth.Commands.VerifyEmail
@@ -34,8 +35,12 @@ namespace SayyadCo.Application.Features.Auth.Commands.VerifyEmail
                 return Result<VerifyEmailResponseDto>.Failure(
                     $"Too many attempts. Try again after {otp.LockedUntil!.Value:HH:mm:ss} UTC");
 
+            if (otp.Type != OtpType.EmailVerification)
+                return Result<VerifyEmailResponseDto>.Failure("Invalid OTP code");
+
             if (otp.IsExpired)
                 return Result<VerifyEmailResponseDto>.Failure("OTP has expired");
+
 
             if (otp.Code != request.OtpCode)
             {

@@ -1,4 +1,5 @@
-﻿using SayyadCo.Domain.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using SayyadCo.Domain.Entities;
 using SayyadCo.Domain.Interfaces.Repositories;
 using SayyadCo.Infrastructure.Data;
 
@@ -12,5 +13,10 @@ namespace SayyadCo.Infrastructure.Repositories
 
         public async Task AddQuestions(IList<Question> questionList)
             => await _context.Questions.AddRangeAsync(questionList);
+
+        public async Task<int> GetQuestionsCount(string testOrdExamId)
+            => await _dbSet.AsNoTracking()
+                .Where(q => q.TestId == testOrdExamId || q.ExamId == testOrdExamId)
+                .CountAsync();
     }
 }

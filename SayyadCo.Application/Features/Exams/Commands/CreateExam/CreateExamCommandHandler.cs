@@ -3,7 +3,6 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using SayyadCo.Application.Common.Models;
 using SayyadCo.Application.Common.Results;
-using SayyadCo.Application.Features.Tests.Commands.AddQuestions;
 using SayyadCo.Domain.Entities;
 using SayyadCo.Domain.Enums;
 using SayyadCo.Domain.Interfaces;
@@ -45,15 +44,12 @@ namespace SayyadCo.Application.Features.Exams.Commands.CreateExam
             if (group is null)
                 return Result<CreateExamResponseDto>.NotFound("Group not found");
 
-            if (group.SectionId != request.SectionId || group.GameId != request.GameId)
-                return Result<CreateExamResponseDto>.Failure("Group does not belong to this SectionGame");
+            if (group.SectionId != request.SectionId || group.GameId != request.GameId
+                || group.AcademicYearId != request.AcademicYearId || group.Semester != request.Semester)
+                return Result<CreateExamResponseDto>.Failure("Group does not belong to the specified section, game, academic year, or semester.");
 
             if (access.IsTeacher && group.CreatedByUserId != userId)
                 return Result<CreateExamResponseDto>.Forbidden("You can only create exams in your own group");
-
-            var academicYear = await _unitOfWork.AcademicYears.GetByIdAsync(request.AcademicYearId);
-            if (academicYear is null)
-                return Result<CreateExamResponseDto>.NotFound("Academic year not found");
 
             var exam = _mapper.Map<Exam>(request);
             exam.Status = access.IsAdminOrSuperAdmin ? ExamStatus.Approved : ExamStatus.Pending;
@@ -72,7 +68,7 @@ namespace SayyadCo.Application.Features.Exams.Commands.CreateExam
             await _unitOfWork.SaveChangesAsync();
 
             var response = _mapper.Map<CreateExamResponseDto>(exam);
-            response.Questions = _mapper.Map<List<AddQuestionResponseDto>>(questions);
+            response.Questions = _mapper.Map<List<ExamQuestionsResponse>>(questions);
 
             return Result<CreateExamResponseDto>.Success(response);
         }
