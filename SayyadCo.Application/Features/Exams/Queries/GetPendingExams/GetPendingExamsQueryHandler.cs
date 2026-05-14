@@ -1,5 +1,4 @@
-﻿// GetPendingExamsQueryHandler.cs
-using AutoMapper;
+﻿using AutoMapper;
 using MediatR;
 using SayyadCo.Application.Common.Results;
 using SayyadCo.Domain.Common;
