@@ -12,6 +12,7 @@ namespace SayyadCo.Application.Mappings
         {
             CreateMap<CreateExamCommand, Exam>()
                 .ForMember(x => x.Questions, opt => opt.Ignore());
+            CreateMap<Question, ExamQuestionsResponse>();
             CreateMap<Exam, CreateExamResponseDto>();
             CreateMap<Question, AddQuestionResponseDto>();
             CreateMap<Exam, GetExamByIdResponseDto>();
