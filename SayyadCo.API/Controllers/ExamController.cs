@@ -8,7 +8,7 @@ using SayyadCo.Application.Features.Exams.Commands.DeleteExam;
 using SayyadCo.Application.Features.Exams.Commands.RejectExam;
 using SayyadCo.Application.Features.Exams.Commands.RejectExamUpdate;
 using SayyadCo.Application.Features.Exams.Commands.UpdateExam;
-using SayyadCo.Application.Features.Exams.Queries;
+using SayyadCo.Application.Features.Exams.Queries.GetExamById;
 using SayyadCo.Domain.Common;
 using SayyadCo.Domain.Enums;
 

@@ -6,7 +6,7 @@ using SayyadCo.Application.Common.Results;
 using SayyadCo.Domain.Interfaces;
 using System.Security.Claims;
 
-namespace SayyadCo.Application.Features.Exams.Queries
+namespace SayyadCo.Application.Features.Exams.Queries.GetExamById
 {
     public class GetExamByIdQueryHandler : IRequestHandler<GetExamByIdQuery, Result<GetExamByIdResponseDto>>
     {

@@ -3,7 +3,7 @@ using SayyadCo.Application.Common.Results;
 using SayyadCo.Domain.Enums;
 using System.Text.Json.Serialization;
 
-namespace SayyadCo.Application.Features.Exams.Queries
+namespace SayyadCo.Application.Features.Exams.Queries.GetExamById
 {
     public class GetExamByIdQuery : IRequest<Result<GetExamByIdResponseDto>>
     {
