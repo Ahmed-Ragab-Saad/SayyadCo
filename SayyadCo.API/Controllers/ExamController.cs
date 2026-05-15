@@ -73,7 +73,7 @@ namespace SayyadCo.API.Controllers
         /// 
         /// Sample request:
         /// 
-        ///     POST /api/sections/3fa85f64.../games/4gb96g75.../academic-years/5cd12h89.../semesters/1/groups/8hj23k56.../exams/7fd45l90.../approve
+        ///     POST /api/exams/7fd45l90.../approve
         /// </remarks>
         /// <response code="200">Exam approved successfully</response>
         /// <response code="401">Unauthorized</response>
@@ -103,7 +103,7 @@ namespace SayyadCo.API.Controllers
         /// 
         /// Sample request:
         /// 
-        ///     POST /api/sections/3fa85f64.../games/4gb96g75.../academic-years/5cd12h89.../semesters/1/groups/8hj23k56.../exams/7fd45l90.../reject
+        ///     POST /api/exams/7fd45l90.../reject
         ///     {
         ///         "reason": "Invalid questions format"
         ///     }

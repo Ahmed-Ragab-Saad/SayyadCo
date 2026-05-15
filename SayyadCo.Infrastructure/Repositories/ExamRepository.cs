@@ -53,7 +53,6 @@ namespace SayyadCo.Infrastructure.Repositories
 
         protected override IQueryable<Exam> GetByIdQueryable()
             => _dbSet
-            .Where(e => e.Status == ExamStatus.Approved)
             .Include(e => e.Questions);
     }
 }

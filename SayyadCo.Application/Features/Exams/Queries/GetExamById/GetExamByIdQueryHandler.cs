@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using SayyadCo.Application.Common.Models;
 using SayyadCo.Application.Common.Results;
+using SayyadCo.Domain.Enums;
 using SayyadCo.Domain.Interfaces;
 using System.Security.Claims;
 
@@ -36,7 +37,7 @@ namespace SayyadCo.Application.Features.Exams.Queries.GetExamById
                 return Result<GetExamByIdResponseDto>.Forbidden("You are not subscribed to this game");
 
             var exam = await _unitOfWork.Exams.GetByIdAsync(request.ExamId);
-            if (exam is null)
+            if (exam is null || exam.Status != ExamStatus.Approved)
                 return Result<GetExamByIdResponseDto>.NotFound("Exam not found");
 
             if (exam.SectionId != request.SectionId ||
