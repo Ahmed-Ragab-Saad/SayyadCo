@@ -120,14 +120,8 @@ namespace SayyadCo.API.Controllers
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Reject(string sectionId, string gameId, string academicYearId, Semester semester,
-            string groupId, string examId, [FromBody] RejectExamCommand command)
+        public async Task<IActionResult> Reject(string examId, [FromBody] RejectExamCommand command)
         {
-            command.SectionId = sectionId;
-            command.GameId = gameId;
-            command.AcademicYearId = academicYearId;
-            command.Semester = semester;
-            command.GroupId = groupId;
             command.ExamId = examId;
             return HandleResult(await Mediator.Send(command));
         }
