@@ -52,7 +52,8 @@ namespace SayyadCo.Application.Features.Exams.Commands.CreateExam
                 return Result<CreateExamResponseDto>.Forbidden("You can only create exams in your own group");
 
             var exam = _mapper.Map<Exam>(request);
-            exam.Status = access.IsAdminOrSuperAdmin ? ExamStatus.Approved : ExamStatus.Pending;
+            //exam.Status = access.IsAdminOrSuperAdmin ? ExamStatus.Approved : ExamStatus.Pending;
+            exam.Status = ExamStatus.Pending;
 
             await _unitOfWork.Exams.AddAsync(exam);
 

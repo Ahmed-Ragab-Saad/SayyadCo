@@ -52,16 +52,16 @@ namespace SayyadCo.Application.Features.Exams.Commands.UpdateExam
             if (!access.IsAdminOrSuperAdmin && exam.CreatedByUserId != userId)
                 return Result<UpdateExamResponseDto>.Forbidden("You can only update your own exam");
 
-            if (access.IsAdminOrSuperAdmin)
-            {
-                await ApplyUpdateDirectly(exam, request);
-                return Result<UpdateExamResponseDto>.Success(new UpdateExamResponseDto
-                {
-                    ExamId = exam.Id,
-                    Status = RequestStatus.Accepted,
-                    Message = "Exam updated successfully"
-                });
-            }
+            //if (access.IsAdminOrSuperAdmin)
+            //{
+            //    await ApplyUpdateDirectly(exam, request);
+            //    return Result<UpdateExamResponseDto>.Success(new UpdateExamResponseDto
+            //    {
+            //        ExamId = exam.Id,
+            //        Status = RequestStatus.Accepted,
+            //        Message = "Exam updated successfully"
+            //    });
+            //}
 
             var existingRequest = await _unitOfWork.ExamUpdateRequests.GetPendingByExamIdAsync(request.ExamId);
             if (existingRequest is not null)

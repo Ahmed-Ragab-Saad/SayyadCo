@@ -79,21 +79,15 @@ namespace SayyadCo.API.Controllers
         /// <response code="401">Unauthorized</response>
         /// <response code="403">Forbidden</response>
         /// <response code="404">Exam not found</response>
-        [HttpPost("exams/{examId}/approve")]
+        [HttpPost("/api/exams/{examId}/approve")]
         [Authorize(Roles = $"{AppRoles.SuperAdmin},{AppRoles.Admin}")]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Approve(string sectionId, string gameId, string academicYearId, Semester semester,
-            string groupId, string examId)
+        public async Task<IActionResult> Approve(string examId)
             => HandleResult(await Mediator.Send(new ApproveExamCommand
             {
-                SectionId = sectionId,
-                GameId = gameId,
-                AcademicYearId = academicYearId,
-                Semester = semester,
-                GroupId = groupId,
                 ExamId = examId
             }));
 
@@ -119,7 +113,7 @@ namespace SayyadCo.API.Controllers
         /// <response code="401">Unauthorized</response>
         /// <response code="403">Forbidden</response>
         /// <response code="404">Exam not found</response>
-        [HttpPost("exams/{examId}/reject")]
+        [HttpPost("/api/exams/{examId}/reject")]
         [Authorize(Roles = $"{AppRoles.SuperAdmin},{AppRoles.Admin}")]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ValidationErrorResponse), StatusCodes.Status400BadRequest)]
