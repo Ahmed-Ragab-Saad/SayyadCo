@@ -17,7 +17,7 @@ namespace SayyadCo.Infrastructure.Services.Auth
             _httpClient = httpClient;
         }
 
-        public async Task<ExternalUserInfo?> VerifyTokenAsync(string accessToken)
+        private async Task<ExternalUserInfo?> VerifyTokenAsync(string accessToken)
         {
             try
             {
@@ -59,5 +59,29 @@ namespace SayyadCo.Infrastructure.Services.Auth
                 return null;
             }
         }
+
+        public async Task<ExternalUserInfo?> LoginWithCodeAsync(string code, string redirectUri)
+        {
+            var tokenUrl = "https://graph.facebook.com/v19.0/oauth/access_token";
+            var response = await _httpClient.PostAsync(tokenUrl,
+                new FormUrlEncodedContent(new Dictionary<string, string>
+                {
+                    ["client_id"] = _settings.AppId,
+                    ["client_secret"] = _settings.AppSecret,
+                    ["redirect_uri"] = redirectUri,
+                    ["code"] = code,
+                }));
+
+            var json = await response.Content.ReadAsStringAsync();
+            var data = JsonDocument.Parse(json);
+
+            if (!data.RootElement.TryGetProperty("access_token", out var tokenProp))
+                return null;
+
+            var accessToken = tokenProp.GetString()!;
+
+            return await VerifyTokenAsync(accessToken);
+        }
+
     }
 }

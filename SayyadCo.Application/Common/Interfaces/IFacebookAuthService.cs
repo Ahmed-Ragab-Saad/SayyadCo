@@ -4,6 +4,6 @@ namespace SayyadCo.Application.Common.Interfaces
 {
     public interface IFacebookAuthService
     {
-        Task<ExternalUserInfo?> VerifyTokenAsync(string accessToken);
+        Task<ExternalUserInfo?> LoginWithCodeAsync(string code, string redirectUri);
     }
 }

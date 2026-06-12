@@ -25,7 +25,7 @@ namespace SayyadCo.Application.Features.Auth.Commands.FacebookLogin
 
         public async Task<Result<FacebookLoginResponseDto>> Handle(FacebookLoginCommand request, CancellationToken cancellationToken)
         {
-            var facebookUser = await _facebookAuthService.VerifyTokenAsync(request.AccessToken);
+            var facebookUser = await _facebookAuthService.LoginWithCodeAsync(request.Code, request.RedirectUri);
             if (facebookUser is null)
                 return Result<FacebookLoginResponseDto>.Failure("Invalid Facebook token");
 
