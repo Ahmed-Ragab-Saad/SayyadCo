@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using SayyadCo.Application.Common.DTOs;
 using SayyadCo.Application.Common.Models;
 using SayyadCo.Application.Features.Profiles.Commands.UpdateProfileInfo;
+using SayyadCo.Application.Features.Profiles.Queries.GetMyFunnyGames;
+using SayyadCo.Application.Features.Profiles.Queries.GetMyStudentGames;
 using SayyadCo.Application.Features.Profiles.Queries.GetMyTeacherGames;
 using SayyadCo.Application.Features.Profiles.Queries.GetProfileInfo;
 using SayyadCo.Domain.Common;
@@ -67,6 +69,38 @@ namespace SayyadCo.API.Controllers
         [ProducesResponseType(typeof(PagedResult<MyGameResponseDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> GetMyTeacherGames([FromQuery] GetMyTeacherGamesQuery query)
+            => HandleResult(await Mediator.Send(query));
+
+        /// <summary>Get my student games</summary>
+        /// <remarks>
+        /// Returns all games the current user is subscribed to as a Student.
+        ///
+        /// Sample request:
+        ///
+        ///     GET /api/profiles/my-student-games?pageNumber=1&amp;pageSize=10
+        /// </remarks>
+        /// <response code="200">Returns paginated list of student games</response>
+        /// <response code="401">Unauthorized</response>
+        [HttpGet("my-student-games")]
+        [ProducesResponseType(typeof(PagedResult<MyGameResponseDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+        public async Task<IActionResult> GetMyStudentGames([FromQuery] GetMyStudentGamesQuery query)
+            => HandleResult(await Mediator.Send(query));
+
+        /// <summary>Get my funny games</summary>
+        /// <remarks>
+        /// Returns all funny games the current user is subscribed to (as Teacher or Student).
+        ///
+        /// Sample request:
+        ///
+        ///     GET /api/profiles/my-funny-games?pageNumber=1&amp;pageSize=10
+        /// </remarks>
+        /// <response code="200">Returns paginated list of funny games</response>
+        /// <response code="401">Unauthorized</response>
+        [HttpGet("my-funny-games")]
+        [ProducesResponseType(typeof(PagedResult<MyFunnyGameResponseDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+        public async Task<IActionResult> GetMyFunnyGames([FromQuery] GetMyFunnyGamesQuery query)
             => HandleResult(await Mediator.Send(query));
     }
 }

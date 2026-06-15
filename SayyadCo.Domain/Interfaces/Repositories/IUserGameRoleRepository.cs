@@ -10,5 +10,7 @@ namespace SayyadCo.Domain.Interfaces.Repositories
         Task<bool> UserHasRoleAsync(string userId, string gameRoleId, string sectionId, string gameId);
         Task<string?> GetUserRoleAsync(string userId, string sectionId, string gameId);
         Task<PagedResult<TeacherGame>> GetTeacherGamesAsync(string userId, QueryParameters parameters);
+        Task<PagedResult<StudentGame>> GetStudentGamesAsync(string userId, QueryParameters parameters);
+        Task<PagedResult<FunnyGameDto>> GetFunnyGamesAsync(string userId, QueryParameters parameters);
     }
 }
