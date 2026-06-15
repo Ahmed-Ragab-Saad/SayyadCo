@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SayyadCo.Domain.Common;
+using SayyadCo.Domain.Entities;
 using SayyadCo.Domain.Interfaces.Repositories;
 using SayyadCo.Infrastructure.Data;
 using SayyadCo.Infrastructure.Identity;
@@ -53,6 +55,25 @@ namespace SayyadCo.Infrastructure.Repositories
                             x.GameId == gameId)
                 .Select(x => x.GameRoleId)
                 .FirstOrDefaultAsync();
+        }
+
+        public async Task<PagedResult<TeacherGame>> GetTeacherGamesAsync(string userId, QueryParameters parameters)
+        {
+            var query = _context.TeacherGames
+                .Include(t => t.SectionGame)
+                    .ThenInclude(sg => sg.Section)
+                .Include(t => t.SectionGame)
+                    .ThenInclude(sg => sg.Game)
+                .AsNoTracking()
+                .Where(t => t.UserId == userId);
+
+            var totalCount = await query.CountAsync();
+            var items = await query
+                .Skip((parameters.PageNumber - 1) * parameters.PageSize)
+                .Take(parameters.PageSize)
+                .ToListAsync();
+
+            return new PagedResult<TeacherGame>(items, totalCount, parameters.PageNumber, parameters.PageSize);
         }
     }
 }

@@ -1,4 +1,7 @@
-﻿namespace SayyadCo.Domain.Interfaces.Repositories
+﻿using SayyadCo.Domain.Common;
+using SayyadCo.Domain.Entities;
+
+namespace SayyadCo.Domain.Interfaces.Repositories
 {
     public interface IUserGameRoleRepository
     {
@@ -6,5 +9,6 @@
         Task RemoveRoleFromUserAsync(string userId, string gameRoleId, string sectionId, string gameId);
         Task<bool> UserHasRoleAsync(string userId, string gameRoleId, string sectionId, string gameId);
         Task<string?> GetUserRoleAsync(string userId, string sectionId, string gameId);
+        Task<PagedResult<TeacherGame>> GetTeacherGamesAsync(string userId, QueryParameters parameters);
     }
 }

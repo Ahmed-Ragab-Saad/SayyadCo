@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SayyadCo.Application.Common.DTOs;
 using SayyadCo.Application.Common.Models;
 using SayyadCo.Application.Features.Profiles.Commands.UpdateProfileInfo;
+using SayyadCo.Application.Features.Profiles.Queries.GetMyTeacherGames;
 using SayyadCo.Application.Features.Profiles.Queries.GetProfileInfo;
+using SayyadCo.Domain.Common;
 
 namespace SayyadCo.API.Controllers
 {
@@ -49,5 +52,21 @@ namespace SayyadCo.API.Controllers
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> UpdateInfo([FromBody] UpdateProfileInfoCommand command)
             => HandleResult(await Mediator.Send(command));
+
+        /// <summary>Get my teacher games</summary>
+        /// <remarks>
+        /// Returns all games the current user is subscribed to as a Teacher.
+        ///
+        /// Sample request:
+        ///
+        ///     GET /api/profiles/my-teacher-games?pageNumber=1&amp;pageSize=10
+        /// </remarks>
+        /// <response code="200">Returns paginated list of teacher games</response>
+        /// <response code="401">Unauthorized</response>
+        [HttpGet("my-teacher-games")]
+        [ProducesResponseType(typeof(PagedResult<MyGameResponseDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+        public async Task<IActionResult> GetMyTeacherGames([FromQuery] GetMyTeacherGamesQuery query)
+            => HandleResult(await Mediator.Send(query));
     }
 }
