@@ -5,7 +5,7 @@ using SayyadCo.Application.Common.Results;
 using SayyadCo.Application.Interfaces;
 using System.Security.Claims;
 
-namespace SayyadCo.Application.Features.Profiles
+namespace SayyadCo.Application.Features.Profiles.Queries.GetProfileInfo
 {
     public class GetProfileInfoQueryHandler : IRequestHandler<GetProfileInfoQuery, Result<GetProfileInfoResponseDto>>
     {

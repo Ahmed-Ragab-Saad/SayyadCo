@@ -209,5 +209,24 @@ namespace SayyadCo.Infrastructure.Services.Auth
             user.Image = picture;
             await _userManager.UpdateAsync(user);
         }
+
+        public async Task<bool> UpdateProfileAsync(string userId, string firstName, string lastName, string image)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user is null)
+                return false;
+
+            user.FirstName = firstName;
+            user.LastName = lastName;
+
+            if (!string.IsNullOrEmpty(image))
+            {
+                user.Image = image;
+                user.IsExternalImage = false;
+            }
+
+            var result = await _userManager.UpdateAsync(user);
+            return result.Succeeded;
+        }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace SayyadCo.Application.Features.Profiles
+﻿namespace SayyadCo.Application.Features.Profiles.Queries.GetProfileInfo
 {
     public class GetProfileInfoResponseDto
     {

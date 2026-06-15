@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using SayyadCo.Application.Features.Profiles;
+using SayyadCo.Application.Common.Models;
+using SayyadCo.Application.Features.Profiles.Commands.UpdateProfileInfo;
+using SayyadCo.Application.Features.Profiles.Queries.GetProfileInfo;
 
 namespace SayyadCo.API.Controllers
 {
@@ -24,5 +26,28 @@ namespace SayyadCo.API.Controllers
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> GetInfo()
             => HandleResult(await Mediator.Send(new GetProfileInfoQuery()));
+
+        /// <summary>Update profile info</summary>
+        /// <remarks>
+        /// Updates the current user's profile information.
+        ///
+        /// Sample request:
+        ///
+        ///     PUT /api/profiles/info
+        ///     {
+        ///         "firstName": "Ahmed",
+        ///         "lastName": "Mohamed",
+        ///         "image": "https://res.cloudinary.com/sayyadco/image/upload/profile.jpg"
+        ///     }
+        /// </remarks>
+        /// <response code="200">Profile updated successfully</response>
+        /// <response code="400">Validation error</response>
+        /// <response code="401">Unauthorized</response>
+        [HttpPut("info")]
+        [ProducesResponseType(typeof(UpdateProfileInfoResponseDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ValidationErrorResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+        public async Task<IActionResult> UpdateInfo([FromBody] UpdateProfileInfoCommand command)
+            => HandleResult(await Mediator.Send(command));
     }
 }

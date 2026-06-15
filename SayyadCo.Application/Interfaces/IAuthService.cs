@@ -18,5 +18,6 @@ namespace SayyadCo.Application.Interfaces
         Task<bool> IsAdminOrSuperAdmin(string userId);
         Task<bool> ResetPasswordAsync(string userId, string newPassword);
         Task UpdateProfileImageAsync(string userId, string picture);
+        Task<bool> UpdateProfileAsync(string userId, string firstName, string lastName, string image);
     }
 }
