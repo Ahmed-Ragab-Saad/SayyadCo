@@ -1,13 +1,11 @@
-﻿namespace SayyadCo.Application.Common.Models
+﻿namespace SayyadCo.Application.Features.Profiles
 {
-    public class AuthUserModel
+    public class GetProfileInfoResponseDto
     {
         public string Id { get; set; } = string.Empty;
-        public string Email { get; set; } = string.Empty;
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
         public string Image { get; set; } = string.Empty;
-        public bool IsExternalImage { get; set; }
-        public DateTime? OtpLockedUntil { get; set; }
     }
 }

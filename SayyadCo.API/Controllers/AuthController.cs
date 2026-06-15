@@ -188,7 +188,8 @@ namespace SayyadCo.API.Controllers
         ///
         ///     POST /api/auth/facebook-login
         ///     {
-        ///         "accessToken": "EAAxxxxxxx..."
+        ///         "code": "EAAxxxxxxx...",
+        ///         "redirectUri": "https://example.com/callback"
         ///     }
         /// </remarks>
         /// <response code="200">Login successful, returns tokens</response>

@@ -39,7 +39,8 @@ namespace SayyadCo.Application.Features.Auth.Commands.GoogleLogin
                 var result = await _authService.RegisterExternalAsync(
                     googleUser.FirstName,
                     googleUser.LastName,
-                    googleUser.Email
+                    googleUser.Email,
+                    googleUser.Picture
                 );
 
                 if (!result.Succeeded)
@@ -50,6 +51,8 @@ namespace SayyadCo.Application.Features.Auth.Commands.GoogleLogin
             else
             {
                 userId = existingUser!.Id;
+                if (existingUser.IsExternalImage)
+                    await _authService.UpdateProfileImageAsync(userId, googleUser.Picture);
             }
 
             var roles = await _authService.GetRolesAsync(userId);
@@ -61,7 +64,7 @@ namespace SayyadCo.Application.Features.Auth.Commands.GoogleLogin
                 Email = googleUser.Email,
                 FirstName = user!.FirstName,
                 LastName = user.LastName,
-                Roles = roles
+                Roles = roles,
             };
 
             var tokens = _jwtGenerator.GenerateTokens(userModel);
@@ -80,6 +83,7 @@ namespace SayyadCo.Application.Features.Auth.Commands.GoogleLogin
                 AccessToken = tokens.AccessToken,
                 RefreshToken = tokens.RefreshToken,
                 AccessTokenExpiry = tokens.AccessTokenExpiry,
+                Image = user.Image,
                 IsNewUser = isNewUser
             });
         }

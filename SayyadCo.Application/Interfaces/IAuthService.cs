@@ -13,9 +13,10 @@ namespace SayyadCo.Application.Interfaces
         Task<AuthUserModel?> FindByIdAsync(string userId);
         Task<bool> IsEmailConfirmedAsync(string userId);
         Task<bool> IsLockedOutAsync(string userId);
-        Task<RegisterResultModel> RegisterExternalAsync(string firstName, string lastName, string email);
+        Task<RegisterResultModel> RegisterExternalAsync(string firstName, string lastName, string email, string image);
         Task<bool> IsExternalUserAsync(string userId);
         Task<bool> IsAdminOrSuperAdmin(string userId);
         Task<bool> ResetPasswordAsync(string userId, string newPassword);
+        Task UpdateProfileImageAsync(string userId, string picture);
     }
 }

@@ -41,7 +41,8 @@ namespace SayyadCo.Application.Features.Auth.Commands.FacebookLogin
                 var result = await _authService.RegisterExternalAsync(
                     facebookUser.FirstName,
                     facebookUser.LastName,
-                    facebookUser.Email
+                    facebookUser.Email,
+                    facebookUser.Picture
                 );
 
                 if (!result.Succeeded)
@@ -52,6 +53,9 @@ namespace SayyadCo.Application.Features.Auth.Commands.FacebookLogin
             else
             {
                 userId = existingUser!.Id;
+
+                if (existingUser.IsExternalImage)
+                    await _authService.UpdateProfileImageAsync(userId, facebookUser.Picture);
             }
 
             var roles = await _authService.GetRolesAsync(userId);
@@ -82,6 +86,7 @@ namespace SayyadCo.Application.Features.Auth.Commands.FacebookLogin
                 AccessToken = tokens.AccessToken,
                 RefreshToken = tokens.RefreshToken,
                 AccessTokenExpiry = tokens.AccessTokenExpiry,
+                Image = null,
                 IsNewUser = isNewUser
             });
         }

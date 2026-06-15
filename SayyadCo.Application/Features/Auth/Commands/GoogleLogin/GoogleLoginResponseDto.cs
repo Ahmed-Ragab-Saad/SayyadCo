@@ -5,6 +5,7 @@
         public string AccessToken { get; set; } = string.Empty;
         public string RefreshToken { get; set; } = string.Empty;
         public DateTime AccessTokenExpiry { get; set; }
+        public string? Image { get; set; }
         public bool IsNewUser { get; set; }
     }
 }

@@ -39,7 +39,8 @@ namespace SayyadCo.Infrastructure.Services.Auth
                 Email = user.Email!,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
-                OtpLockedUntil = user.OtpLockedUntil
+                OtpLockedUntil = user.OtpLockedUntil,
+                IsExternalImage = user.IsExternalImage
             };
         }
 
@@ -57,10 +58,11 @@ namespace SayyadCo.Infrastructure.Services.Auth
         {
             var user = new ApplicationUser
             {
-                FirstName = request.FirstName,
-                LastName = request.LastName,
+                FirstName = request.FirstName.Trim(),
+                LastName = request.LastName.Trim(),
                 Email = request.Email,
-                UserName = request.Email
+                UserName = request.Email,
+                IsExternalImage = false
             };
 
             var result = await _userManager.CreateAsync(user, request.Password);
@@ -110,7 +112,8 @@ namespace SayyadCo.Infrastructure.Services.Auth
                 Id = user.Id,
                 Email = user.Email!,
                 FirstName = user.FirstName,
-                LastName = user.LastName
+                LastName = user.LastName,
+                Image = user.Image
             };
         }
 
@@ -132,7 +135,7 @@ namespace SayyadCo.Infrastructure.Services.Auth
             return await _userManager.IsLockedOutAsync(user);
         }
 
-        public async Task<RegisterResultModel> RegisterExternalAsync(string firstName, string lastName, string email)
+        public async Task<RegisterResultModel> RegisterExternalAsync(string firstName, string lastName, string email, string image)
         {
             var user = new ApplicationUser
             {
@@ -140,7 +143,9 @@ namespace SayyadCo.Infrastructure.Services.Auth
                 LastName = lastName,
                 Email = email,
                 UserName = email,
-                EmailConfirmed = true
+                EmailConfirmed = true,
+                Image = image,
+                IsExternalImage = true
             };
 
             var result = await _userManager.CreateAsync(user);
@@ -194,6 +199,15 @@ namespace SayyadCo.Infrastructure.Services.Auth
             var token = await _userManager.GeneratePasswordResetTokenAsync(user);
             var result = await _userManager.ResetPasswordAsync(user, token, newPassword);
             return result.Succeeded;
+        }
+
+        public async Task UpdateProfileImageAsync(string userId, string picture)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user is null) return;
+
+            user.Image = picture;
+            await _userManager.UpdateAsync(user);
         }
     }
 }
