@@ -4,6 +4,7 @@ using SayyadCo.Application.Common.Models;
 using SayyadCo.Application.Features.Plans.Commands.CreatePlan;
 using SayyadCo.Application.Features.Plans.Commands.DeletePlan;
 using SayyadCo.Application.Features.Plans.Commands.UpdatePlan;
+using SayyadCo.Application.Features.Plans.Queries.GetAllPlans;
 using SayyadCo.Domain.Common;
 
 namespace SayyadCo.API.Controllers
@@ -93,5 +94,22 @@ namespace SayyadCo.API.Controllers
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Delete(string id)
             => HandleResult(await Mediator.Send(new DeletePlanCommand { Id = id }));
+
+        /// <summary>Get all plans</summary>
+        /// <remarks>
+        /// Retrieves a paginated list of all subscription plans.
+        ///
+        /// Sample request:
+        ///
+        ///     GET /api/plans?pageNumber=1&pageSize=10
+        /// </remarks>
+        /// <response code="200">Plans retrieved successfully</response>
+        /// <response code="400">Invalid query parameters</response>
+        [HttpGet]
+        [AllowAnonymous]
+        [ProducesResponseType(typeof(PagedResult<GetAllPlansResponseDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ValidationErrorResponse), StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetAll([FromQuery] GetAllPlansQuery query)
+            => HandleResult(await Mediator.Send(query));
     }
 }
