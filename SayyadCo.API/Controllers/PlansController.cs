@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SayyadCo.Application.Common.Models;
 using SayyadCo.Application.Features.Plans.Commands.CreatePlan;
+using SayyadCo.Application.Features.Plans.Commands.DeletePlan;
 using SayyadCo.Application.Features.Plans.Commands.UpdatePlan;
 using SayyadCo.Domain.Common;
 
@@ -50,7 +51,6 @@ namespace SayyadCo.API.Controllers
         ///     {
         ///         "titleAr": "الخطة الأساسية المحدثة",
         ///         "titleEn": "Updated Basic Plan",
-        ///         "name": "basic",
         ///         "descriptionAr": "خطة أساسية محدثة للطلاب",
         ///         "descriptionEn": "Updated basic plan for students",
         ///         "durationInDays": 60,
@@ -73,5 +73,25 @@ namespace SayyadCo.API.Controllers
             command.Id = id;
             return HandleResult(await Mediator.Send(command));
         }
+
+        /// <summary>Delete a plan</summary>
+        /// <remarks>
+        /// Deletes an existing subscription plan. Only SuperAdmins can delete plans.
+        ///
+        /// Sample request:
+        ///
+        ///     DELETE /api/plans/{id}
+        /// </remarks>
+        /// <response code="200">Plan deleted successfully</response>
+        /// <response code="401">Unauthorized</response>
+        /// <response code="403">Forbidden</response>
+        /// <response code="404">Plan not found</response>
+        [HttpDelete("{id}")]
+        [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> Delete(string id)
+            => HandleResult(await Mediator.Send(new DeletePlanCommand { Id = id }));
     }
 }
