@@ -11,7 +11,10 @@ namespace SayyadCo.Infrastructure.Repositories
         {
         }
 
-        public async Task<bool> ExistingByTitle(string title)
-            => await _dbSet.AnyAsync(p => p.TitleAr == title || p.TitleEn == title);
+        public async Task<bool> ExistingByTitle(string title, string? id = null)
+        {
+            title = title.ToUpper();
+            return await _dbSet.AnyAsync(p => p.Id != id && (p.TitleAr.ToUpper() == title || p.TitleEn.ToUpper() == title));
+        }
     }
 }
