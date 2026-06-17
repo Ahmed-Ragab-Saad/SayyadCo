@@ -24,9 +24,9 @@ namespace SayyadCo.Infrastructure.Data.Configurations
                 .IsRequired()
                 .HasMaxLength(200);
 
-            builder.Property(x => x.Name)
-                .IsRequired()
-                .HasMaxLength(100);
+            //builder.Property(x => x.Name)
+            //    .IsRequired()
+            //    .HasMaxLength(100);
 
             builder.Property(x => x.DescriptionAr)
                 .IsRequired()
@@ -47,8 +47,8 @@ namespace SayyadCo.Infrastructure.Data.Configurations
                 .IsRequired();
 
             // Indexes
-            builder.HasIndex(x => x.Name)
-                .IsUnique();
+            //builder.HasIndex(x => x.Name)
+            //    .IsUnique();
 
             builder.HasIndex(x => x.Price);
         }

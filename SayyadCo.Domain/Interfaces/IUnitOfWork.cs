@@ -18,6 +18,7 @@ namespace SayyadCo.Domain.Interfaces
         IExamRepository Exams { get; }
         IGroupMemberRepository GroupMembers { get; }
         IExamUpdateRequestRepository ExamUpdateRequests { get; }
+        IPlanRepository Plans { get; }
         Task<int> SaveChangesAsync();
     }
 }

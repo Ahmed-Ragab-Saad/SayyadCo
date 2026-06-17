@@ -93,6 +93,7 @@ namespace SayyadCo.Infrastructure
             services.AddScoped<IGroupRepository, GroupRepository>();
             services.AddScoped<IGroupMemberRepository, GroupMemberRepository>();
             services.AddScoped<IExamUpdateRequestRepository, ExamUpdateRequestRepository>();
+            services.AddScoped<IPlanRepository, PlanRepository>();
 
             services.AddScoped<IGoogleAuthService, GoogleAuthService>();
             services.AddHttpClient<IFacebookAuthService, FacebookAuthService>();
