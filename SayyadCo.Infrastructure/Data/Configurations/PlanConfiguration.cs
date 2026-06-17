@@ -43,10 +43,6 @@ namespace SayyadCo.Infrastructure.Data.Configurations
                 .IsRequired()
                 .HasPrecision(18, 2);
 
-            builder.Property(x => x.PlanType)
-                .IsRequired()
-                .HasConversion<int>();
-
             builder.Property(x => x.CreatedAt)
                 .IsRequired();
 
@@ -54,7 +50,6 @@ namespace SayyadCo.Infrastructure.Data.Configurations
             builder.HasIndex(x => x.Name)
                 .IsUnique();
 
-            builder.HasIndex(x => x.PlanType);
             builder.HasIndex(x => x.Price);
         }
     }

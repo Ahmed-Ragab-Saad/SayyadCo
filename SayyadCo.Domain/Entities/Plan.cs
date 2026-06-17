@@ -1,5 +1,4 @@
 ﻿using SayyadCo.Domain.Common;
-using SayyadCo.Domain.Enums;
 
 namespace SayyadCo.Domain.Entities
 {
@@ -12,6 +11,7 @@ namespace SayyadCo.Domain.Entities
         public string DescriptionEn { get; set; } = string.Empty;
         public int DurationInDays { get; set; }
         public decimal Price { get; set; }
-        public PlanType PlanType { get; set; }
+
+        public ICollection<SectionGamePlan> SectionGamePlans { get; set; } = new List<SectionGamePlan>();
     }
 }
