@@ -2,6 +2,7 @@
 using SayyadCo.Application.Features.Plans.Commands.CreatePlan;
 using SayyadCo.Application.Features.Plans.Commands.UpdatePlan;
 using SayyadCo.Application.Features.Plans.Queries.GetAllPlans;
+using SayyadCo.Application.Features.Plans.Queries.GetPlanById;
 using SayyadCo.Domain.Entities;
 
 namespace SayyadCo.Application.Mappings
@@ -15,6 +16,7 @@ namespace SayyadCo.Application.Mappings
             CreateMap<UpdatePlanCommand, Plan>();
             CreateMap<Plan, UpdatePlanResponseDto>();
             CreateMap<Plan, GetAllPlansResponseDto>();
+            CreateMap<Plan, GetPlanByIdResponseDto>();
         }
     }
 }

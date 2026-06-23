@@ -5,6 +5,7 @@ using SayyadCo.Application.Features.Plans.Commands.CreatePlan;
 using SayyadCo.Application.Features.Plans.Commands.DeletePlan;
 using SayyadCo.Application.Features.Plans.Commands.UpdatePlan;
 using SayyadCo.Application.Features.Plans.Queries.GetAllPlans;
+using SayyadCo.Application.Features.Plans.Queries.GetPlanById;
 using SayyadCo.Domain.Common;
 
 namespace SayyadCo.API.Controllers
@@ -104,12 +105,27 @@ namespace SayyadCo.API.Controllers
         ///     GET /api/plans?pageNumber=1&pageSize=10
         /// </remarks>
         /// <response code="200">Plans retrieved successfully</response>
-        /// <response code="400">Invalid query parameters</response>
         [HttpGet]
         [AllowAnonymous]
         [ProducesResponseType(typeof(PagedResult<GetAllPlansResponseDto>), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ValidationErrorResponse), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetAll([FromQuery] GetAllPlansQuery query)
             => HandleResult(await Mediator.Send(query));
+
+        /// <summary>Get plan by id</summary>
+        /// <remarks>
+        /// Reurns a single plan by ID.
+        ///
+        /// Sample request:
+        ///
+        ///     GET /api/plans/3fa85f64-5717-4562-b3fc-2c963f66afa6
+        /// </remarks>
+        /// <response code="200">Plan retrieved successfully</response>
+        /// <response code="404">Plan not founds</response>
+        [HttpGet("{id}")]
+        [AllowAnonymous]
+        [ProducesResponseType(typeof(GetPlanByIdResponseDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetById(string id)
+            => HandleResult(await Mediator.Send(new GetPlanByIdQuery() { Id = id }));
     }
 }
