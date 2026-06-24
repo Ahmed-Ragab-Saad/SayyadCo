@@ -8,6 +8,7 @@ using SayyadCo.Application.Features.SectionGames.Commands.AddGameToSection;
 using SayyadCo.Application.Features.SectionGames.Commands.AssignPlans;
 using SayyadCo.Application.Features.SectionGames.Commands.RemoveGameFromSection;
 using SayyadCo.Application.Features.SectionGames.Queries.GetFunnySectionGames;
+using SayyadCo.Application.Features.SectionGames.Queries.GetSectionGamePlans;
 using SayyadCo.Application.Features.SectionGames.Queries.GetSectionGames;
 using SayyadCo.Application.Features.Sections.Commands.CreateSection;
 using SayyadCo.Application.Features.Sections.Commands.DeleteSection;
@@ -318,5 +319,47 @@ namespace SayyadCo.API.Controllers
             command.GameId = gameId;
             return HandleResult(await Mediator.Send(command));
         }
+
+        /// <summary>Get plans assigned to a section game</summary>
+        /// <remarks>
+        /// Retrieves all plans assigned to a specific SectionGame,
+        /// including the plan details and assignment type
+        /// (Teacher or Student).
+        ///
+        /// This endpoint can be accessed anonymously and is commonly
+        /// used to display the available plans associated with a game
+        /// inside a section.
+        ///
+        /// Sample request:
+        ///
+        ///     GET /api/sections/3fa85f64.../games/4gb96g75.../plans
+        ///
+        /// Sample response:
+        ///
+        ///     [
+        ///         {
+        ///             "planId": "5cd12h89...",
+        ///             "planName": "Basic Plan",
+        ///             "planType": 0
+        ///         },
+        ///         {
+        ///             "planId": "7ef34k21...",
+        ///             "planName": "Premium Plan",
+        ///             "planType": 1
+        ///         }
+        ///     ]
+        /// </remarks>
+        /// <response code="200">Plans retrieved successfully</response>
+        /// <response code="404">SectionGame not found</response>
+        [HttpGet("{sectionId}/games/{gameId}/plans")]
+        [AllowAnonymous]
+        [ProducesResponseType(typeof(List<GetSectionGamePlansResponseDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetPlans(string sectionId, string gameId)
+            => HandleResult(await Mediator.Send(new GetSectionGamePlansQuery
+            {
+                SectionId = sectionId,
+                GameId = gameId
+            }));
     }
 }
