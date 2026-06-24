@@ -20,6 +20,8 @@ namespace SayyadCo.Domain.Interfaces
         IExamUpdateRequestRepository ExamUpdateRequests { get; }
         IPlanRepository Plans { get; }
         ISectionGamePlanRepository SectionGamePlans { get; }
+        ICodeRepository Codes { get; }
+        IGameRoleRepository GameRoles { get; }
         Task<int> SaveChangesAsync();
     }
 }

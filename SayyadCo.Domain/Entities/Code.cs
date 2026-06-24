@@ -12,11 +12,12 @@ namespace SayyadCo.Domain.Entities
 
         public string SectionId { get; set; } = string.Empty;
         public string GameId { get; set; } = string.Empty;
-        public string UserId { get; set; } = string.Empty;
         public string GameRoleId { get; set; } = string.Empty;
+        public string SectionGamePlanId { get; set; } = string.Empty;
 
         //Navigations
         public SectionGame SectionGame { get; set; } = null!;
         public GameRole GameRole { get; set; } = null!;
+        public SectionGamePlan SectionGamePlan { get; set; } = null!;
     }
 }

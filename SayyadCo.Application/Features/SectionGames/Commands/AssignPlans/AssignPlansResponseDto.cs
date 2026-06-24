@@ -10,5 +10,6 @@ namespace SayyadCo.Application.Features.SectionGames.Commands.AssignPlans
         public decimal Price { get; set; }
         public int DurationInDays { get; set; }
         public PlanType PlanType { get; set; }
+        public string GameRole { get; set; } = string.Empty;
     }
 }

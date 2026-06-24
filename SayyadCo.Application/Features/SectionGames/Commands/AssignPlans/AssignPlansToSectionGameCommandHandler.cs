@@ -36,10 +36,17 @@ namespace SayyadCo.Application.Features.SectionGames.Commands.AssignPlans
                 }
 
                 var existing = await _unitOfWork.SectionGamePlans
-                    .GetAsync(planDto.PlanId, request.SectionId, request.GameId, planDto.PlanType);
+                    .GetAsync(planDto.PlanId, request.SectionId, request.GameId, planDto.GameRoleId);
                 if (existing is not null)
                 {
-                    errors.Add($"Plan '{plan.TitleEn}' | '{plan.TitleAr}' already assigned as {planDto.PlanType}");
+                    errors.Add($"Plan '{plan.TitleEn}' | '{plan.TitleAr}' already assigned as {planDto.GameRoleId}");
+                    continue;
+                }
+
+                var gameRole = await _unitOfWork.GameRoles.GetByIdAsync(planDto.GameRoleId);
+                if (gameRole is null)
+                {
+                    errors.Add($"Role '{planDto.GameRoleId}' is invalid");
                     continue;
                 }
 
@@ -48,7 +55,8 @@ namespace SayyadCo.Application.Features.SectionGames.Commands.AssignPlans
                     PlanId = planDto.PlanId,
                     SectionId = request.SectionId,
                     GameId = request.GameId,
-                    PlanType = planDto.PlanType
+                    //PlanType = planDto.PlanType
+                    GameRoleId = planDto.GameRoleId
                 });
 
                 response.Add(new AssignPlansResponseDto
@@ -58,7 +66,8 @@ namespace SayyadCo.Application.Features.SectionGames.Commands.AssignPlans
                     PlanTitleAr = plan.TitleAr,
                     Price = plan.Price,
                     DurationInDays = plan.DurationInDays,
-                    PlanType = planDto.PlanType
+                    //PlanType = planDto.PlanType,
+                    GameRole = gameRole.Role
                 });
             }
 

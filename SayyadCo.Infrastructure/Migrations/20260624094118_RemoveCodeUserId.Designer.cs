@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SayyadCo.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using SayyadCo.Infrastructure.Data;
 namespace SayyadCo.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260624094118_RemoveCodeUserId")]
+    partial class RemoveCodeUserId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -208,10 +211,6 @@ namespace SayyadCo.Infrastructure.Migrations
                         .HasColumnType("bit")
                         .HasDefaultValue(false);
 
-                    b.Property<string>("SectionGamePlanId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("SectionId")
                         .IsRequired()
                         .HasMaxLength(450)
@@ -233,8 +232,6 @@ namespace SayyadCo.Infrastructure.Migrations
                     b.HasIndex("GameRoleId");
 
                     b.HasIndex("IsUsed");
-
-                    b.HasIndex("SectionGamePlanId");
 
                     b.HasIndex("Value")
                         .IsUnique();
@@ -818,13 +815,12 @@ namespace SayyadCo.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("GameRoleId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("PlanId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("PlanType")
+                        .HasColumnType("int");
 
                     b.Property<string>("SectionId")
                         .IsRequired()
@@ -832,11 +828,9 @@ namespace SayyadCo.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("GameRoleId");
-
                     b.HasIndex("SectionId", "GameId");
 
-                    b.HasIndex("PlanId", "SectionId", "GameId", "GameRoleId")
+                    b.HasIndex("PlanId", "SectionId", "GameId", "PlanType")
                         .IsUnique();
 
                     b.ToTable("SectionGamePlans", (string)null);
@@ -1150,12 +1144,6 @@ namespace SayyadCo.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SayyadCo.Domain.Entities.SectionGamePlan", "SectionGamePlan")
-                        .WithMany("Codes")
-                        .HasForeignKey("SectionGamePlanId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("SayyadCo.Domain.Entities.SectionGame", "SectionGame")
                         .WithMany("Codes")
                         .HasForeignKey("SectionId", "GameId")
@@ -1165,8 +1153,6 @@ namespace SayyadCo.Infrastructure.Migrations
                     b.Navigation("GameRole");
 
                     b.Navigation("SectionGame");
-
-                    b.Navigation("SectionGamePlan");
                 });
 
             modelBuilder.Entity("SayyadCo.Domain.Entities.Exam", b =>
@@ -1310,12 +1296,6 @@ namespace SayyadCo.Infrastructure.Migrations
 
             modelBuilder.Entity("SayyadCo.Domain.Entities.SectionGamePlan", b =>
                 {
-                    b.HasOne("SayyadCo.Domain.Entities.GameRole", "GameRole")
-                        .WithMany("SectionGamePlans")
-                        .HasForeignKey("GameRoleId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
                     b.HasOne("SayyadCo.Domain.Entities.Plan", "Plan")
                         .WithMany("SectionGamePlans")
                         .HasForeignKey("PlanId")
@@ -1327,8 +1307,6 @@ namespace SayyadCo.Infrastructure.Migrations
                         .HasForeignKey("SectionId", "GameId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("GameRole");
 
                     b.Navigation("Plan");
 
@@ -1422,8 +1400,6 @@ namespace SayyadCo.Infrastructure.Migrations
             modelBuilder.Entity("SayyadCo.Domain.Entities.GameRole", b =>
                 {
                     b.Navigation("Codes");
-
-                    b.Navigation("SectionGamePlans");
                 });
 
             modelBuilder.Entity("SayyadCo.Domain.Entities.Group", b =>
@@ -1465,11 +1441,6 @@ namespace SayyadCo.Infrastructure.Migrations
             modelBuilder.Entity("SayyadCo.Domain.Entities.SectionGameAcademicYear", b =>
                 {
                     b.Navigation("Groups");
-                });
-
-            modelBuilder.Entity("SayyadCo.Domain.Entities.SectionGamePlan", b =>
-                {
-                    b.Navigation("Codes");
                 });
 
             modelBuilder.Entity("SayyadCo.Domain.Entities.Test", b =>

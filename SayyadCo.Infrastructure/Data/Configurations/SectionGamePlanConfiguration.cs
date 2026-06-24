@@ -11,7 +11,7 @@ namespace SayyadCo.Infrastructure.Data.Configurations
             builder.ToTable("SectionGamePlans");
             builder.HasKey(x => x.Id);
 
-            builder.HasIndex(x => new { x.PlanId, x.SectionId, x.GameId, x.PlanType })
+            builder.HasIndex(x => new { x.PlanId, x.SectionId, x.GameId, x.GameRoleId })
                 .IsUnique();
 
             builder.HasOne(x => x.Plan)
@@ -24,6 +24,11 @@ namespace SayyadCo.Infrastructure.Data.Configurations
                 .HasForeignKey(x => new { x.SectionId, x.GameId })
                 .HasPrincipalKey(sg => new { sg.SectionId, sg.GameId })
                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasOne(x => x.GameRole)
+                .WithMany(sg => sg.SectionGamePlans)
+                .HasForeignKey(x => x.GameRoleId)
+                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

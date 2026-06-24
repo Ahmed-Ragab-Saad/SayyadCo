@@ -340,12 +340,12 @@ namespace SayyadCo.API.Controllers
         ///         {
         ///             "planId": "5cd12h89...",
         ///             "planName": "Basic Plan",
-        ///             "planType": 0
+        ///             "gameRoleId": "2uv495g7..."
         ///         },
         ///         {
         ///             "planId": "7ef34k21...",
         ///             "planName": "Premium Plan",
-        ///             "planType": 1
+        ///             "gameRoleId": "be42f69b..."
         ///         }
         ///     ]
         /// </remarks>

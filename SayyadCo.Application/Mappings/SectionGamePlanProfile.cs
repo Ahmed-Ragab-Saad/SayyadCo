@@ -13,7 +13,8 @@ namespace SayyadCo.Application.Mappings
                 .ForMember(dest => dest.PlanTitleEn, opt => opt.MapFrom(src => src.Plan.TitleEn))
                 .ForMember(dest => dest.PlanTitleAr, opt => opt.MapFrom(src => src.Plan.TitleAr))
                 .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Plan.Price))
-                .ForMember(dest => dest.DurationInDays, opt => opt.MapFrom(src => src.Plan.DurationInDays));
+                .ForMember(dest => dest.DurationInDays, opt => opt.MapFrom(src => src.Plan.DurationInDays))
+                .ForMember(dest => dest.GameRole, opt => opt.MapFrom(src => src.GameRole.Role));
         }
     }
 }

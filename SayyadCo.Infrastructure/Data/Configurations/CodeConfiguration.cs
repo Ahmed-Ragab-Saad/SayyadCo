@@ -15,7 +15,6 @@ namespace SayyadCo.Infrastructure.Data.Configurations
                 .IsRequired()
                 .HasMaxLength(50);
 
-            // ✅ بدل SectionGameId
             builder.Property(x => x.SectionId)
                 .IsRequired()
                 .HasMaxLength(450);
@@ -23,9 +22,6 @@ namespace SayyadCo.Infrastructure.Data.Configurations
             builder.Property(x => x.GameId)
                 .IsRequired()
                 .HasMaxLength(450);
-
-            builder.Property(x => x.UserId)
-                .HasMaxLength(450); // ✅ مش Required لأنه Nullable
 
             builder.Property(x => x.GameRoleId)
                 .IsRequired()
@@ -38,7 +34,6 @@ namespace SayyadCo.Infrastructure.Data.Configurations
             builder.Property(x => x.CreatedAt)
                 .IsRequired();
 
-            // ✅ Composite FK
             builder.HasOne(x => x.SectionGame)
                 .WithMany(sg => sg.Codes)
                 .HasForeignKey(x => new { x.SectionId, x.GameId })
@@ -50,10 +45,14 @@ namespace SayyadCo.Infrastructure.Data.Configurations
                 .HasForeignKey(x => x.GameRoleId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            builder.HasOne(x => x.SectionGamePlan)
+                .WithMany(x => x.Codes)
+                .HasForeignKey(x => x.SectionGamePlanId)
+                .OnDelete(DeleteBehavior.Restrict);
+
             // Indexes
             builder.HasIndex(x => x.Value).IsUnique();
-            builder.HasIndex(x => x.UserId);
-            builder.HasIndex(x => new { x.SectionId, x.GameId }); // ✅
+            builder.HasIndex(x => new { x.SectionId, x.GameId });
             builder.HasIndex(x => x.GameRoleId);
             builder.HasIndex(x => x.IsUsed);
         }

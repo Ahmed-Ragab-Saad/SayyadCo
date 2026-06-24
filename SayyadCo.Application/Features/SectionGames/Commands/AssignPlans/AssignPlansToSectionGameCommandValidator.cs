@@ -13,9 +13,9 @@ namespace SayyadCo.Application.Features.SectionGames.Commands.AssignPlans
             RuleForEach(x => x.Plans).ChildRules(p =>
             {
                 p.RuleFor(x => x.PlanId).NotEmpty();
-                p.RuleFor(x => x.PlanType)
-                    .IsInEnum()
-                    .WithMessage("Invalid plan type");
+                p.RuleFor(x => x.GameRoleId)
+                    .NotEmpty()
+                    .WithMessage("Invalid game role");
             });
         }
     }

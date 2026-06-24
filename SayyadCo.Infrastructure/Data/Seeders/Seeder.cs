@@ -20,6 +20,7 @@ namespace SayyadCo.Infrastructure.Data.Seeders
         public async Task SeedAsync()
         {
             await SeedRolesAsync();
+            await SeedGameRolesAsync();
             await SeedSuperAdminAsync();
             await SeedFunnyGamesSction();
         }
@@ -35,6 +36,20 @@ namespace SayyadCo.Infrastructure.Data.Seeders
                 if (!await roleManager.RoleExistsAsync(role))
                     await roleManager.CreateAsync(new IdentityRole(role));
             }
+        }
+
+        private async Task SeedGameRolesAsync()
+        {
+            var unitOfWork = _serviceProvider.GetRequiredService<IUnitOfWork>();
+
+            string[] roles = [GameRoles.Teacher, GameRoles.Student];
+
+            foreach (var role in roles)
+            {
+                if (!await unitOfWork.GameRoles.IsRoleNameExist(role))
+                    await unitOfWork.GameRoles.AddAsync(new GameRole() { Role = role });
+            }
+            await unitOfWork.SaveChangesAsync();
         }
 
         private async Task SeedSuperAdminAsync()
