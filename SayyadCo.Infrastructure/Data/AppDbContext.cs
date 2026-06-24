@@ -31,6 +31,7 @@ namespace SayyadCo.Infrastructure.Data
         public DbSet<UserGameRole> UserGameRoles { get; set; }
         public DbSet<SectionGameAcademicYear> SectionGameAcademicYears { get; set; }
         public DbSet<ExamUpdateRequest> ExamUpdateRequests { get; set; }
+        public DbSet<SectionGamePlan> SectionGamePlans { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

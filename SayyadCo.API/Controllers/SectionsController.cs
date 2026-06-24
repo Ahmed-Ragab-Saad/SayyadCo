@@ -5,6 +5,7 @@ using SayyadCo.Application.Common.Models;
 using SayyadCo.Application.Features.SectionGames.Commands.AddAcademicYear;
 using SayyadCo.Application.Features.SectionGames.Commands.AddGameToFunnySection;
 using SayyadCo.Application.Features.SectionGames.Commands.AddGameToSection;
+using SayyadCo.Application.Features.SectionGames.Commands.AssignPlans;
 using SayyadCo.Application.Features.SectionGames.Commands.RemoveGameFromSection;
 using SayyadCo.Application.Features.SectionGames.Queries.GetFunnySectionGames;
 using SayyadCo.Application.Features.SectionGames.Queries.GetSectionGames;
@@ -276,5 +277,46 @@ namespace SayyadCo.API.Controllers
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> GatFunnySectionGames([FromQuery] GetFunnySectionGamesQuery query)
             => HandleResult(await Mediator.Send(query));
+
+        /// <summary>Assign plans to section game</summary>
+        /// <remarks>
+        /// Assigns one or more plans to a SectionGame with a specific type (Teacher or Student).
+        /// Only Admins and SuperAdmins can assign plans.
+        ///
+        /// Sample request:
+        ///
+        ///     POST /api/sections/3fa85f64.../games/4gb96g75.../plans
+        ///     {
+        ///         "plans": [
+        ///             {
+        ///                 "planId": "5cd12h89...",
+        ///                 "planType": 0
+        ///             },
+        ///             {
+        ///                 "planId": "5cd12h89...",
+        ///                 "planType": 1
+        ///             }
+        ///         ]
+        ///     }
+        /// </remarks>
+        /// <response code="200">Plans assigned successfully</response>
+        /// <response code="400">Validation error or plan already assigned</response>
+        /// <response code="401">Unauthorized</response>
+        /// <response code="403">Forbidden</response>
+        /// <response code="404">SectionGame or Plan not found</response>
+        [HttpPost("{sectionId}/games/{gameId}/plans")]
+        [Authorize(Roles = $"{AppRoles.SuperAdmin},{AppRoles.Admin}")]
+        [ProducesResponseType(typeof(List<AssignPlansResponseDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ValidationErrorResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> AssignPlans(string sectionId, string gameId,
+            [FromBody] AssignPlansToSectionGameCommand command)
+        {
+            command.SectionId = sectionId;
+            command.GameId = gameId;
+            return HandleResult(await Mediator.Send(command));
+        }
     }
 }
