@@ -51,9 +51,9 @@ namespace SayyadCo.Application.Features.Codes.Commands.GenerateCode
                 GameId = code.GameId,
                 PlanId = sectionGamePlan.PlanId,
                 PlanTitleEn = sectionGamePlan.Plan.TitleEn,
+                PlanTitleAr = sectionGamePlan.Plan.TitleAr,
                 Price = sectionGamePlan.Plan.Price,
                 DurationInDays = sectionGamePlan.Plan.DurationInDays,
-                //PlanType = sectionGamePlan.PlanType,
                 ExpiresAt = code.ExpiresAt!.Value,
                 GameRole = await _unitOfWork.GameRoles.GetRoleNameAsync(sectionGamePlan.GameRoleId) ?? string.Empty
             });

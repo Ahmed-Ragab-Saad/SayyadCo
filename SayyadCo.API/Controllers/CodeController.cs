@@ -6,7 +6,7 @@ using SayyadCo.Domain.Common;
 
 namespace SayyadCo.API.Controllers
 {
-    [Route("api/sections/{sectionId}/games/{gameId}")]
+    //[Route("api/sections/{sectionId}/games/{gameId}")]
     [ApiController]
     [Authorize]
     public class CodesController : CustomBaseController
@@ -18,9 +18,11 @@ namespace SayyadCo.API.Controllers
         ///
         /// Sample request:
         ///
-        ///     POST /api/sections/3fa85f64.../games/4gb96g75.../codes
+        ///     POST /api/Codes/generate-code
         ///     {
-        ///         "sectionGamePlanId": "teacher-role-id...",
+        ///         "sectionId": "3fa85f64...",
+        ///         "gameId": "4gb96g75..."
+        ///         "sectionGamePlanId": "neu7d3v4...",
         ///         "expiresAt": "2026-12-31T00:00:00Z"
         ///     }
         /// </remarks>
@@ -29,18 +31,14 @@ namespace SayyadCo.API.Controllers
         /// <response code="401">Unauthorized</response>
         /// <response code="403">Forbidden</response>
         /// <response code="404">SectionGame or GameRole not found</response>
-        [HttpPost("codes")]
+        [HttpPost("generate-code")]
         [Authorize(Roles = $"{AppRoles.SuperAdmin},{AppRoles.Admin}")]
         [ProducesResponseType(typeof(GenerateCodeResponseDto), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ValidationErrorResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Generate(string sectionId, string gameId, [FromBody] GenerateCodeCommand command)
-        {
-            command.SectionId = sectionId;
-            command.GameId = gameId;
-            return HandleResult(await Mediator.Send(command));
-        }
+        public async Task<IActionResult> Generate([FromBody] GenerateCodeCommand command)
+            => HandleResult(await Mediator.Send(command));
     }
 }

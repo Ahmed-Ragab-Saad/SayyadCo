@@ -98,11 +98,24 @@ namespace SayyadCo.API
             // Configure the HTTP request pipeline.
 
             app.UseSwagger();
-            app.UseSwaggerUI(options =>
+            if (builder.Environment.IsDevelopment())
             {
-                options.SwaggerEndpoint("/swagger/v1/swagger.json", "SayyadCo API v1");
-                options.RoutePrefix = string.Empty;
-            });
+                app.UseSwaggerUI(options =>
+                {
+                    options.SwaggerEndpoint("/swagger/v1/swagger.json", "SayyadCo API v1");
+                    options.RoutePrefix = string.Empty;
+
+                    options.ConfigObject.PersistAuthorization = true;
+                });
+            }
+            else
+            {
+                app.UseSwaggerUI(options =>
+                {
+                    options.SwaggerEndpoint("/swagger/v1/swagger.json", "SayyadCo API v1");
+                    options.RoutePrefix = string.Empty;
+                });
+            }
 
             app.UseHttpsRedirection();
 
