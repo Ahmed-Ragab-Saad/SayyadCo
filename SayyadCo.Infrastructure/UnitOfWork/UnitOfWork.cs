@@ -12,7 +12,6 @@ namespace SayyadCo.Infrastructure.UnitOfWork
         public IOtpRepository Otps { get; }
         public IGameRepository Games { get; }
         public ISectionGameRepository SectionGames { get; }
-        public IUserGameRoleRepository UserGameRoles { get; }
         public ITestRepository Tests { get; }
         public IQuestionRepository Questions { get; }
         public IAcademicYearRepository AcademicYears { get; }
@@ -25,14 +24,15 @@ namespace SayyadCo.Infrastructure.UnitOfWork
         public ISectionGamePlanRepository SectionGamePlans { get; }
         public ICodeRepository Codes { get; }
         public IGameRoleRepository GameRoles { get; }
+        public IUserGameRepository UserGames { get; }
 
         public UnitOfWork(AppDbContext context, IRefreshTokenRepository refreshTokenRepository, IOtpRepository otps,
              ISectoinRepository sections, IGameRepository games, ISectionGameRepository sectionGames,
-             IUserGameRoleRepository userGames, ITestRepository tests, IQuestionRepository questions,
-             IAcademicYearRepository academicYears, ISectionGameAcademicYearRepository sectionGameAcademicYears,
-             IGroupRepository groups, IExamRepository exams, IGroupMemberRepository groupMembers,
-             IExamUpdateRequestRepository examUpdateRequests, IPlanRepository plans, ISectionGamePlanRepository sectionGamePlans,
-             ICodeRepository codes, IGameRoleRepository gameRoles)
+             ITestRepository tests, IQuestionRepository questions, IAcademicYearRepository academicYears,
+             ISectionGameAcademicYearRepository sectionGameAcademicYears, IGroupRepository groups, IExamRepository exams,
+             IGroupMemberRepository groupMembers, IExamUpdateRequestRepository examUpdateRequests, IPlanRepository plans,
+             ISectionGamePlanRepository sectionGamePlans, ICodeRepository codes, IGameRoleRepository gameRoles,
+             IUserGameRepository userGames)
         {
             _context = context;
             RefreshTokens = refreshTokenRepository;
@@ -40,7 +40,6 @@ namespace SayyadCo.Infrastructure.UnitOfWork
             Sections = sections;
             Games = games;
             SectionGames = sectionGames;
-            UserGameRoles = userGames;
             Tests = tests;
             Questions = questions;
             AcademicYears = academicYears;
@@ -53,6 +52,7 @@ namespace SayyadCo.Infrastructure.UnitOfWork
             SectionGamePlans = sectionGamePlans;
             Codes = codes;
             GameRoles = gameRoles;
+            UserGames = userGames;
         }
 
         public async Task<int> SaveChangesAsync()

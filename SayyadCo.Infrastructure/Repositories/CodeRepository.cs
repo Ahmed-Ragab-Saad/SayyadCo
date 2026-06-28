@@ -11,7 +11,14 @@ namespace SayyadCo.Infrastructure.Repositories
         {
         }
         public async Task<Code?> GetByValueAsync(string value)
-            => await _dbSet.Include(c => c.GameRole).FirstOrDefaultAsync(c => c.Value == value);
+            => await _dbSet.Include(c => c.GameRole)
+                .Include(c => c.SectionGamePlan)
+                    .ThenInclude(sgp => sgp.Plan)
+                .Include(c => c.SectionGame)
+                    .ThenInclude(sg => sg.Section)
+                .Include(c => c.SectionGame)
+                    .ThenInclude(sg => sg.Game)
+                .FirstOrDefaultAsync(c => c.Value == value);
 
         public async Task<IEnumerable<Code>> GetBySectionGameAsync(string sectionId, string gameId)
             => await _dbSet

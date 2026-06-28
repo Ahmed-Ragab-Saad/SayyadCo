@@ -6,10 +6,9 @@ using SayyadCo.Domain.Common;
 
 namespace SayyadCo.API.Controllers
 {
-    //[Route("api/sections/{sectionId}/games/{gameId}")]
     [ApiController]
-    [Authorize]
-    public class CodesController : CustomBaseController
+    [Authorize(Roles = $"{AppRoles.SuperAdmin},{AppRoles.Admin}")]
+    public class AdminCodesController : CustomBaseController
     {
         /// <summary>Generate a code for SectionGame</summary>
         /// <remarks>
@@ -32,7 +31,6 @@ namespace SayyadCo.API.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="404">SectionGame or GameRole not found</response>
         [HttpPost("generate-code")]
-        [Authorize(Roles = $"{AppRoles.SuperAdmin},{AppRoles.Admin}")]
         [ProducesResponseType(typeof(GenerateCodeResponseDto), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ValidationErrorResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]

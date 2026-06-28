@@ -7,12 +7,12 @@ namespace SayyadCo.Infrastructure.Services.GameAccess
 {
     public class GameAccessService : IGameAccessService
     {
-        private readonly IUserGameRoleRepository _userGameRoleRepository;
+        private readonly IUserGameRepository _userGameRepository;
         private readonly IAuthService _authService;
 
-        public GameAccessService(IUserGameRoleRepository userGameRoleRepository, IAuthService authService)
+        public GameAccessService(IUserGameRepository userGameRepository, IAuthService authService)
         {
-            _userGameRoleRepository = userGameRoleRepository;
+            _userGameRepository = userGameRepository;
             _authService = authService;
         }
 
@@ -28,7 +28,7 @@ namespace SayyadCo.Infrastructure.Services.GameAccess
                     IsAdminOrSuperAdmin = true
                 };
 
-            var userRole = await _userGameRoleRepository.GetUserRoleAsync(userId, sectionId, gameId);
+            var userRole = await _userGameRepository.GetUserRoleAsync(userId, sectionId, gameId);
 
             if (userRole == GameRoles.Teacher)
                 return new GameAccessResult

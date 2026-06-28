@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SayyadCo.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using SayyadCo.Infrastructure.Data;
 namespace SayyadCo.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260628110436_CombineStudentTeacherGamesInUserGames")]
+    partial class CombineStudentTeacherGamesInUserGames
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -886,6 +889,9 @@ namespace SayyadCo.Infrastructure.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
@@ -894,35 +900,38 @@ namespace SayyadCo.Infrastructure.Migrations
 
                     b.Property<string>("GameId")
                         .IsRequired()
-                        .HasMaxLength(450)
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("GameRoleId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("SectionId")
+                    b.Property<string>("SectionGameGameId")
                         .IsRequired()
-                        .HasMaxLength(450)
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("SectionGameSectionId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("SectionId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("StartDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETUTCDATE()");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasMaxLength(450)
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ApplicationUserId");
+
                     b.HasIndex("GameRoleId");
 
-                    b.HasIndex("UserId");
-
-                    b.HasIndex("SectionId", "GameId");
+                    b.HasIndex("SectionGameSectionId", "SectionGameGameId");
 
                     b.ToTable("UserGames");
                 });
@@ -948,23 +957,18 @@ namespace SayyadCo.Infrastructure.Migrations
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Image")
                         .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsExternalImage")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(true);
+                        .HasColumnType("bit");
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -1279,21 +1283,19 @@ namespace SayyadCo.Infrastructure.Migrations
 
             modelBuilder.Entity("SayyadCo.Domain.Entities.UserGame", b =>
                 {
+                    b.HasOne("SayyadCo.Infrastructure.Identity.ApplicationUser", null)
+                        .WithMany("UserGames")
+                        .HasForeignKey("ApplicationUserId");
+
                     b.HasOne("SayyadCo.Domain.Entities.GameRole", "GameRole")
                         .WithMany("UserGames")
                         .HasForeignKey("GameRoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SayyadCo.Infrastructure.Identity.ApplicationUser", null)
-                        .WithMany("UserGames")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("SayyadCo.Domain.Entities.SectionGame", "SectionGame")
                         .WithMany("UserGames")
-                        .HasForeignKey("SectionId", "GameId")
+                        .HasForeignKey("SectionGameSectionId", "SectionGameGameId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

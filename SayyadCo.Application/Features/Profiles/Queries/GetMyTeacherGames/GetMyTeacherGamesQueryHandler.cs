@@ -29,7 +29,7 @@ namespace SayyadCo.Application.Features.Profiles.Queries.GetMyTeacherGames
             if (string.IsNullOrEmpty(userId))
                 return Result<PagedResult<MyGameResponseDto>>.Unauthorized("Unauthorized");
 
-            var games = await _unitOfWork.UserGameRoles.GetTeacherGamesAsync(userId, request);
+            var games = await _unitOfWork.UserGames.GetTeacherGamesAsync(userId, request);
 
             var mappedItems = _mapper.Map<IEnumerable<MyGameResponseDto>>(games.Items);
 

@@ -9,5 +9,6 @@ namespace SayyadCo.Domain.Entities
         //Navigation
         public ICollection<Code> Codes { get; set; } = new List<Code>();
         public ICollection<SectionGamePlan> SectionGamePlans { get; set; } = new List<SectionGamePlan>();
+        public ICollection<UserGame> UserGames { get; set; } = new List<UserGame>();
     }
 }

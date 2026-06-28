@@ -16,7 +16,7 @@ namespace SayyadCo.Application.Mappings
             CreateMap<AuthUserModel, GetProfileInfoResponseDto>();
             CreateMap<UpdateProfileInfoCommand, UpdateProfileInfoResponseDto>();
 
-            CreateMap<TeacherGame, MyGameResponseDto>()
+            CreateMap<UserGame, MyGameResponseDto>()
                 .ForMember(dest => dest.SectionTitleAr, opt => opt.MapFrom(src => src.SectionGame.Section.TitleAr))
                 .ForMember(dest => dest.SectionTitleEn, opt => opt.MapFrom(src => src.SectionGame.Section.TitleEn))
                 .ForMember(dest => dest.GameTitleAr, opt => opt.MapFrom(src => src.SectionGame.Game.TitleAr))

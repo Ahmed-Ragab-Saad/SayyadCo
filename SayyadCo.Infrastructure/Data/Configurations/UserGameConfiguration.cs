@@ -1,12 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SayyadCo.Domain.Common;
+using SayyadCo.Domain.Entities;
 
 namespace SayyadCo.Infrastructure.Data.Configurations
 {
-    public abstract class BaseUserGameConfiguration<T> : IEntityTypeConfiguration<T> where T : BaseUserGame
+    public class UserGameConfiguration : IEntityTypeConfiguration<UserGame>
     {
-        public virtual void Configure(EntityTypeBuilder<T> builder)
+        public virtual void Configure(EntityTypeBuilder<UserGame> builder)
         {
             builder.HasKey(x => x.Id);
 
@@ -32,11 +32,19 @@ namespace SayyadCo.Infrastructure.Data.Configurations
             builder.Property(x => x.ExpirationDate)
                 .IsRequired();
 
+            builder.Property(x => x.GameRoleId)
+                .IsRequired();
+
             // Relationship
             builder.HasOne(x => x.SectionGame)
-                .WithMany()
+                .WithMany(sg => sg.UserGames)
                 .HasForeignKey(x => new { x.SectionId, x.GameId })
                 .HasPrincipalKey(sg => new { sg.SectionId, sg.GameId })
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasOne(x => x.GameRole)
+                .WithMany(gr => gr.UserGames)
+                .HasForeignKey(x => x.GameRoleId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             // Indexes

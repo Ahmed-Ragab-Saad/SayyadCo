@@ -9,7 +9,6 @@ namespace SayyadCo.Domain.Interfaces
         ISectoinRepository Sections { get; }
         IGameRepository Games { get; }
         ISectionGameRepository SectionGames { get; }
-        IUserGameRoleRepository UserGameRoles { get; }
         ITestRepository Tests { get; }
         IQuestionRepository Questions { get; }
         IAcademicYearRepository AcademicYears { get; }
@@ -22,6 +21,7 @@ namespace SayyadCo.Domain.Interfaces
         ISectionGamePlanRepository SectionGamePlans { get; }
         ICodeRepository Codes { get; }
         IGameRoleRepository GameRoles { get; }
+        IUserGameRepository UserGames { get; }
         Task<int> SaveChangesAsync();
     }
 }
